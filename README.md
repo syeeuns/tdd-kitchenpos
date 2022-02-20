@@ -2,8 +2,8 @@
 
 ## 요구 사항
 ### Product
-- [ ] `Product`를 생성할 수 있다.
-- [ ] `Product` 전체 목록을 조회할 수 있다.
+- [x] `Product`를 생성할 수 있다.
+- [x] `Product` 전체 목록을 조회할 수 있다.
 - [ ] `name`은 반드시 들어가야한다. (`Exception`)
 - [ ] `name`에는 욕설(profanity)이 들어가면 안된다. (`Exception`)
 

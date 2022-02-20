@@ -111,7 +111,7 @@ class ProductServiceTest {
 
   @DisplayName("상품 전체 조회 -> 성공")
   @Test
-  void SHOULD_success_WHEN_findAll_Product() {
+  void SHOULD_success_WHEN_findAll_Products() {
     // 준비
     Product product2 = new Product(UUID.randomUUID(), "데리버거", BigDecimal.valueOf(1000));
     List<Product> productList = List.of(product, product2);

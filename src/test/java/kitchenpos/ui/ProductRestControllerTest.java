@@ -41,10 +41,7 @@ public class ProductRestControllerTest {
 
   @BeforeEach
   void setUp() {
-    product = new Product();
-    product.setId(UUID.randomUUID());
-    product.setPrice(BigDecimal.valueOf(5000));
-    product.setName("싸이버거");
+    product = new Product(UUID.randomUUID(), "싸이버거", BigDecimal.valueOf(5000));
   }
 
   @DisplayName("상품 생성 -> 성공")
@@ -129,7 +126,7 @@ public class ProductRestControllerTest {
 
   @DisplayName("상품 전체 조회 -> 성공")
   @Test
-  void SHOULD_success_WHEN_findAll_Product() throws Exception{
+  void SHOULD_success_WHEN_findAll_Products() throws Exception{
     // 준비
     Product product2 = new Product(UUID.randomUUID(), "데리버거", BigDecimal.valueOf(1000));
     List<Product> productList = List.of(product, product2);
@@ -142,23 +139,11 @@ public class ProductRestControllerTest {
 
     // 검증
     perform.andExpect(status().isOk())
+        .andExpect(jsonPath("$.[0].id").value(product.getId().toString()))
         .andExpect(jsonPath("$.[0].name").value(product.getName()))
         .andExpect(jsonPath("$.[0].price").value(product.getPrice()))
+        .andExpect(jsonPath("$.[1].id").value(product2.getId().toString()))
         .andExpect(jsonPath("$.[1].name").value(product2.getName()))
         .andExpect(jsonPath("$.[1].price").value(product2.getPrice()));
-  }
-
-
-  @DisplayName("상품 전체 조회 -> 실패")
-  @Test
-  void SHOULD_fail_WHEN_findAll_Product() throws Exception{
-    // 준비
-    given(productService.findAll()).willThrow(IllegalArgumentException.class);
-
-    // 실행
-    ResultActions perform = mockMvc.perform(get("/api/products"));
-
-    // 검증
-    perform.andExpect(status().is4xxClientError());
   }
 }

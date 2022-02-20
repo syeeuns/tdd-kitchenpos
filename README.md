@@ -4,12 +4,12 @@
 ### Product
 - [x] `Product`를 생성할 수 있다.
 - [x] `Product` 전체 목록을 조회할 수 있다.
-- [ ] `name`은 반드시 들어가야한다. (`Exception`)
-- [ ] `name`에는 욕설(profanity)이 들어가면 안된다. (`Exception`)
+- [x] `name`은 반드시 들어가야한다. (`Exception`)
+- [x] `name`에는 욕설(profanity)이 들어가면 안된다. (`Exception`)
 
-- [ ] `Product`의 `price`를 변경할 수 있다.
-- [ ] `price`는 반드시 들어가야한다. (`Exception`)
-- [ ] `price`는 0 이상이어야 한다. (`Exception`)
+- [x] `Product`의 `price`를 변경할 수 있다.
+- [x] `price`는 반드시 들어가야한다. (`Exception`)
+- [x] `price`는 0 이상이어야 한다. (`Exception`)
 
 ### Menu 
 - [ ] `Menu`를 생성할 수 있다.

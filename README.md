@@ -28,9 +28,9 @@
 - [ ] `displayed`의 상태를 변경할 수 있다.
 
 ### Menu-groups 
-- [ ] `Menu-groups`를 생성할 수 있다.
-- [ ] `Menu-groups` 전체 목록을 조회할 수 있다.
-- [ ] `name`은 반드시 존재해야한다. (`Exception`)
+- [x] `Menu-groups`를 생성할 수 있다.
+- [x] `Menu-groups` 전체 목록을 조회할 수 있다.
+- [x] `name`은 반드시 존재해야한다. (`Exception`)
 
 ### Order
 - [ ] `Order`를 생성할 수 있다.

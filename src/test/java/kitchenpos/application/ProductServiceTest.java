@@ -36,10 +36,7 @@ class ProductServiceTest {
 
   @BeforeEach
   void setUp() {
-    product = new Product();
-    product.setId(UUID.randomUUID());
-    product.setPrice(BigDecimal.valueOf(5000));
-    product.setName("싸이버거");
+    product = new Product(UUID.randomUUID(), "싸이버거", BigDecimal.valueOf(5000));
   }
 
   @DisplayName("상품 생성 -> 성공")

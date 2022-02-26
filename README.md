@@ -36,6 +36,7 @@
 - [ ] `Order`를 생성할 수 있다.
 - [ ] `Order`전체 목록을 조회할 수 있다.
 - [ ] `Order`의 `status`를 변경할 수 있다.
+- 
 - [ ] `type`은 반드시 존재해야한다. (`Exception`)
 - [ ] `type`은 `DELIVERY`, `TAKEOUT`, `EAT_IN` 중 하나이어야한다.
 - [ ] `type`이 `EAT_IN`인 경우, `orderLineItem`의 `quantity`는 0 이상이어야 한다. (`Exception`)
@@ -56,11 +57,11 @@
 - [ ] `Order-table`을 생성할 수 있다.
 - [ ] `Order-table`의 `empty`의 상태를 변경할 수 있다.
 - [ ] `Order-table`의 `numberOfGeust`를 변경할 수 있다.
+- 
 - [ ] `name`은 반드시 들어가야한다. (`Exception`)
 - [ ] `Order-table`의 `empty`를 `true`로 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `status`는 `COMPLETED`이어야 한다. (`Exception`)
 - [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `empty`는 `false`이어야 한다. (`Exception`)
 - [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `numberOfGuests`는 0 이상이어야 한다. (`Exception`)
-  
 
 ## 용어 사전
 

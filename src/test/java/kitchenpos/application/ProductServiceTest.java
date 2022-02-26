@@ -119,11 +119,6 @@ class ProductServiceTest {
     List<Product> products = productRepository.findAll();
 
     // 검증
-    assertThat(products.get(0).getId()).isEqualTo(productList.get(0).getId());
-    assertThat(products.get(0).getName()).isEqualTo(productList.get(0).getName());
-    assertThat(products.get(0).getPrice()).isEqualTo(productList.get(0).getPrice());
-    assertThat(products.get(1).getId()).isEqualTo(productList.get(1).getId());
-    assertThat(products.get(1).getName()).isEqualTo(productList.get(1).getName());
-    assertThat(products.get(1).getPrice()).isEqualTo(productList.get(1).getPrice());
+    assertThat(products).contains(product, product2);
   }
 }

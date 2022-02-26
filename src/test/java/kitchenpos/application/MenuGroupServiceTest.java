@@ -67,9 +67,6 @@ class MenuGroupServiceTest {
     List<MenuGroup> menuGroups = menuGroupRepository.findAll();
 
     // 검증
-    assertThat(menuGroups.get(0).getId()).isEqualTo(menuGroupList.get(0).getId());
-    assertThat(menuGroups.get(0).getName()).isEqualTo(menuGroupList.get(0).getName());
-    assertThat(menuGroups.get(1).getId()).isEqualTo(menuGroupList.get(1).getId());
-    assertThat(menuGroups.get(1).getName()).isEqualTo(menuGroupList.get(1).getName());
+    assertThat(menuGroups).contains(menuGroup, menuGroup2);
   }
 }

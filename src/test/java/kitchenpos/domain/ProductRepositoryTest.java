@@ -3,6 +3,7 @@ package kitchenpos.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,5 +33,17 @@ class ProductRepositoryTest {
     assertThat(saved.getId()).isEqualTo(product.getId());
     assertThat(saved.getName()).isEqualTo(product.getName());
     assertThat(saved.getPrice()).isEqualTo(product.getPrice());
+  }
+
+  @DisplayName("상품 전체 조회 -> 성공")
+  @Test
+  void SHOULD_success_WHEN_findAll_Product() {
+    Product product2 = new Product(UUID.randomUUID(), "데리버거", BigDecimal.valueOf(1000));
+    Product saved1 = productRepository.save(product);
+    Product saved2 = productRepository.save(product2);
+
+    List<Product> products = productRepository.findAll();
+
+    assertThat(products).contains(saved1, saved2);
   }
 }

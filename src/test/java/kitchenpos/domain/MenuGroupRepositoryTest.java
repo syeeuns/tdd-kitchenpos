@@ -38,7 +38,7 @@ class MenuGroupRepositoryTest {
   void SHOULD_success_WHEN_findAll_Menu_group() {
     MenuGroup menuGroup2 = new MenuGroup(UUID.randomUUID(), "신메뉴");
     MenuGroup saved1 = menuGroupRepository.save(menuGroup);
-    MenuGroup saved2 = menuGroupRepositreory.save(menuGroup2);
+    MenuGroup saved2 = menuGroupRepository.save(menuGroup2);
 
     List<MenuGroup> menuGroups = menuGroupRepository.findAll();
 

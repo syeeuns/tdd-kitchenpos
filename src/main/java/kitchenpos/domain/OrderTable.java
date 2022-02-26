@@ -1,5 +1,6 @@
 package kitchenpos.domain;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +24,20 @@ public class OrderTable {
     private boolean empty;
 
     public OrderTable() {
+    }
+
+    public OrderTable(OrderTable orderTable) {
+        this.id = orderTable.id;
+        this.name = orderTable.name;
+        this.numberOfGuests = orderTable.numberOfGuests;
+        this.empty = orderTable.empty;
+    }
+
+    public OrderTable(UUID id, String name, int numberOfGuests, boolean empty) {
+        this.id = id;
+        this.name = name;
+        this.numberOfGuests = numberOfGuests;
+        this.empty = empty;
     }
 
     public UUID getId() {
@@ -55,5 +70,23 @@ public class OrderTable {
 
     public void setEmpty(final boolean empty) {
         this.empty = empty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        OrderTable that = (OrderTable) o;
+        return numberOfGuests == that.numberOfGuests && empty == that.empty && Objects.equals(
+            id, that.id) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, numberOfGuests, empty);
     }
 }

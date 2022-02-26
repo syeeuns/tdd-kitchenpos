@@ -1,3 +1,4 @@
+
 # 키친포스
 
 ## 요구 사항
@@ -56,10 +57,10 @@
 ### Order-table
 - [ ] `Order-table`을 생성할 수 있다.
 - [ ] `Order-table`의 `empty`의 상태를 변경할 수 있다.
-- [ ] `Order-table`의 `numberOfGeust`를 변경할 수 있다.
+- [ ] `Order-table`의 `numberOfGuest`를 변경할 수 있다.
 - 
 - [ ] `name`은 반드시 들어가야한다. (`Exception`)
-- [ ] `Order-table`의 `empty`를 `true`로 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `status`는 `COMPLETED`이어야 한다. (`Exception`)
+- [ ] `Order-table`의 `empty`를 `true`로 변경할 때, `orderTableId`에 해당하는 `Order`의 `status`는 `COMPLETED`이어야 한다. (`Exception`)
 - [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `empty`는 `false`이어야 한다. (`Exception`)
 - [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `numberOfGuests`는 0 이상이어야 한다. (`Exception`)
 

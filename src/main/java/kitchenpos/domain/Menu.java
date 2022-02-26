@@ -1,5 +1,6 @@
 package kitchenpos.domain;
 
+import java.util.Objects;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +43,27 @@ public class Menu {
     private UUID menuGroupId;
 
     public Menu() {
+    }
+
+    public Menu(Menu menu) {
+        this.id = menu.id;
+        this.name = menu.name;
+        this.price = menu.price;
+        this.menuGroup = menu.menuGroup;
+        this.displayed = menu.displayed;
+        this.menuProducts = menu.menuProducts;
+        this.menuGroupId = menu.menuGroupId;
+    }
+
+    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed,
+        List<MenuProduct> menuProducts, UUID menuGroupId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
     }
 
     public UUID getId() {
@@ -93,10 +115,31 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
-        return menuGroupId;
+        return getMenuGroup().getId();
     }
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Menu menu = (Menu) o;
+        return displayed == menu.displayed
+            && Objects.equals(id, menu.id)
+            && Objects.equals(name, menu.name)
+            && Objects.equals(price, menu.price)
+            && menuGroup.equals(menu.menuGroup)
+            && Objects.equals(menuProducts, menu.menuProducts);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price, menuGroup, displayed, menuProducts);
     }
 }

@@ -106,8 +106,8 @@ public class MenuRestControllerTest {
 
   static Stream<Arguments> wrongMenus() {
     // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithEmptyName = new Menu(menu);
-    menuWithEmptyName.setName("");
+    Menu menuWithoutName = new Menu(menu);
+    menuWithoutName.setName("");
 
     Menu menuWithoutPrice = new Menu(menu);
     menuWithoutPrice.setPrice(null);
@@ -130,7 +130,7 @@ public class MenuRestControllerTest {
 //    }
 
     return Stream.of(
-        arguments(menuWithEmptyName, "빈 이름"),
+        arguments(menuWithoutName, "빈 이름"),
         arguments(menuWithNagtivePrice, "가격 없음"),
         arguments(menuWithNagtivePrice, "음수 가격"),
         arguments(menuWithOverPrice, "창렬 가격"),

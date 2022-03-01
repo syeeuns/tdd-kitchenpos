@@ -13,20 +13,20 @@
 - [x] `price`는 0 이상이어야 한다. (`Exception`)
 
 ### Menu 
-- [ ] `Menu`를 생성할 수 있다.
-- [ ] `Menu` 전체 목록을 조회할 수 있다.
-- [ ] `price`는 반드시 들어가야한다. (`Exception`)
-- [ ] `price`는 0 이상이어야 한다. (`Exception`)
-- [ ] `menuProduct`의 `quantity`는 0이상이어야 한다. (`Exception`)
-- [ ] `menu`의 `price`는 `menuProduct`의 `price`*`quantity` 이하이어야 한다. (`Exception`)
-- [ ] `name`은 반드시 들어가야한다. (`Exception`)
-- [ ] `name`에는 욕설(profanity)이 들어가면 안된다. (`Exception`)
+- [x] `Menu`를 생성할 수 있다.
+- [x] `Menu` 전체 목록을 조회할 수 있다.
+- [x] `price`는 반드시 들어가야한다. (`Exception`)
+- [x] `price`는 0 이상이어야 한다. (`Exception`)
+- [x] `menuProduct`의 `quantity`는 0이상이어야 한다. (`Exception`)
+- [x] `menu`의 `price`는 `menuProduct`의 `price`*`quantity` 이하이어야 한다. (`Exception`)
+- [x] `name`은 반드시 들어가야한다. (`Exception`)
+- [x] `name`에는 욕설(profanity)이 들어가면 안된다. (`Exception`)
 
-- [ ] `Menu`의 가격을 변경할 수 있다.
-- [ ] `price`는 반드시 존재해야한다. (`Exception`)
-- [ ] `price`는 0 이상이어야 한다. (`Exception`)
-- [ ] `menu`의 `price`는 `menuProduct`의 `price`*`quantity` 이하이어야 한다. (`Exception`)
-- [ ] `displayed`의 상태를 변경할 수 있다.
+- [x] `Menu`의 가격을 변경할 수 있다.
+- [x] `price`는 반드시 존재해야한다. (`Exception`)
+- [x] `price`는 0 이상이어야 한다. (`Exception`)
+- [x] `menu`의 `price`는 `menuProduct`의 `price`*`quantity` 이하이어야 한다. (`Exception`)
+- [x] `displayed`의 상태를 변경할 수 있다.
 
 ### Menu-groups 
 - [x] `Menu-groups`를 생성할 수 있다.
@@ -39,7 +39,7 @@
 - [ ] `Order`의 `status`를 변경할 수 있다.
 - 
 - [ ] `type`은 반드시 존재해야한다. (`Exception`)
-- [ ] `type`은 `DELIVERY`, `TAKEOUT`, `EAT_IN` 중 하나이어야한다.
+- [x] `type`은 `DELIVERY`, `TAKEOUT`, `EAT_IN` 중 하나이어야한다.
 - [ ] `type`이 `EAT_IN`인 경우, `orderLineItem`의 `quantity`는 0 이상이어야 한다. (`Exception`)
 - [ ] `oderLineItem`의 `menuId`에 해당하는 `Menu`는 `displayed`가 `true`여야한다. (`Exception`)
 - [ ] `oderLineItem`의 `price`는 `menuId`에 해당하는 `Menu`의 `price`와 같아야한다. (`Exception`)
@@ -55,14 +55,14 @@
 - [ ] `Order`의 `status`를 `COMPLETED`로 변경할 때, `Order`의 `type`이 `DELIVERY`가 아니면, `status`가 `SERVED`이어야 한다. (`Exception`)
 
 ### Order-table
-- [ ] `Order-table`을 생성할 수 있다.
-- [ ] `Order-table`의 `empty`의 상태를 변경할 수 있다.
-- [ ] `Order-table`의 `numberOfGuest`를 변경할 수 있다.
+- [x] `Order-table`을 생성할 수 있다.
+- [x] `Order-table`의 `empty`의 상태를 변경할 수 있다.
+- [x] `Order-table`의 `numberOfGuest`를 변경할 수 있다.
 - 
-- [ ] `name`은 반드시 들어가야한다. (`Exception`)
-- [ ] `Order-table`의 `empty`를 `true`로 변경할 때, `orderTableId`에 해당하는 `Order`의 `status`는 `COMPLETED`이어야 한다. (`Exception`)
-- [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `empty`는 `false`이어야 한다. (`Exception`)
-- [ ] `Order-table`의 `numberOfGuest`를 변경할 때, `numberOfGuests`는 0 이상이어야 한다. (`Exception`)
+- [x] `name`은 반드시 들어가야한다. (`Exception`)
+- [x] `Order-table`의 `empty`를 `true`로 변경할 때, `orderTableId`에 해당하는 `Order`의 `status`는 `COMPLETED`이어야 한다. (`Exception`)
+- [x] `Order-table`의 `numberOfGuest`를 변경할 때, `orderTableId`에 해당하는 `Order-table`의 `empty`는 `false`이어야 한다. (`Exception`)
+- [x] `Order-table`의 `numberOfGuest`를 변경할 때, `numberOfGuests`는 0 이상이어야 한다. (`Exception`)
 
 ## 용어 사전
 

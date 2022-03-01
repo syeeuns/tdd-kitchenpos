@@ -58,6 +58,10 @@ public class Product {
             this.price = price;
             return this;
         }
+
+        public Product build() {
+            return new Product(this);
+        }
     }
 
     public UUID getId() {

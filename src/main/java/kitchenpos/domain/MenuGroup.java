@@ -46,6 +46,10 @@ public class MenuGroup {
             this.name = name;
             return this;
         }
+
+        public MenuGroup build() {
+            return new MenuGroup(this);
+        }
     }
 
     public UUID getId() {

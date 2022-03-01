@@ -135,7 +135,7 @@ public class MenuRestControllerTest {
         arguments(menuWithNagtivePrice, "음수 가격"),
         arguments(menuWithOverPrice, "창렬 가격"),
         arguments(menuWithZeroQuantity, "상품 갯수 0"),
-        arguments(menuWithZeroQuantity, "욕설")
+        arguments(menuWithProfanity, "욕설")
         );
   }
 

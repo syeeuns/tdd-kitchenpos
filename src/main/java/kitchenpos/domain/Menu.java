@@ -124,6 +124,10 @@ public class Menu {
             this.menuProducts = menuProducts;
             return this;
         }
+
+        public Menu build() {
+            return new Menu(this);
+        }
     }
 
     public UUID getId() {

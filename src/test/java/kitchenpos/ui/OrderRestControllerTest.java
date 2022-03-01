@@ -3,6 +3,7 @@ package kitchenpos.ui;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,9 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.application.OrderService;
+import kitchenpos.domain.Menu;
 import kitchenpos.domain.Order;
 import kitchenpos.domain.OrderStatus;
 import kitchenpos.domain.OrderType;
@@ -347,5 +350,27 @@ public class OrderRestControllerTest {
 
     // 검증
     perform.andExpect(status().is4xxClientError());
+  }
+
+  @DisplayName("주문 전체 조회 -> 성공")
+  @Test
+  void SHOULD_success_WHEN_findAll_Orders() throws Exception {
+    // 준비
+    Order clonedDeliveryOrder = new Order(deliveryOrder);
+    clonedDeliveryOrder.setStatus(OrderStatus.ACCEPTED);
+    List<Order> orderList = List.of(clonedDeliveryOrder);
+
+    given(orderService.findAll()).willReturn(orderList);
+
+    // 실행
+    ResultActions perform = mockMvc.perform(get("/api/orders")
+        .accept(MediaType.APPLICATION_JSON));
+
+    // 검증
+    perform.andExpect(status().isOk())
+        .andExpect(jsonPath("$.[0].id").value(clonedDeliveryOrder.getId().toString()))
+        .andExpect(jsonPath("$.[0].type").value(clonedDeliveryOrder.getType().toString()))
+        .andExpect(jsonPath("$.[0].status").value(clonedDeliveryOrder.getStatus().toString()))
+        .andExpect(jsonPath("$.[0].deliveryAddress").value(deliveryOrder.getDeliveryAddress()));
   }
 }

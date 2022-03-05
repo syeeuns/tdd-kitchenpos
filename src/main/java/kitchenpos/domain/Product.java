@@ -30,6 +30,12 @@ public class Product {
         this.price = price;
     }
 
+    public Product(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.price = product.getPrice();
+    }
+
     public Product(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;

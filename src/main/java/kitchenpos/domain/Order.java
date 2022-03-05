@@ -83,6 +83,68 @@ public class Order {
     this.orderTable = order.getOrderTable();
   }
 
+  public Order(Builder builder) {
+    this.id = builder.id;
+    this.type = builder.type;
+    this.status = builder.status;
+    this.orderDateTime = builder.orderDateTime;
+    this.orderLineItems = builder.orderLineItems;
+    this.deliveryAddress = builder.deliveryAddress;
+    this.orderTable = builder.orderTable;
+  }
+
+  public static class Builder {
+    private UUID id;
+    private OrderType type;
+    private OrderStatus status;
+    private LocalDateTime orderDateTime;
+    private List<OrderLineItem> orderLineItems;
+    private String deliveryAddress;
+    private OrderTable orderTable;
+
+    public Builder() {
+    }
+
+    public Builder id(UUID id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder type(OrderType type) {
+      this.type = type;
+      return this;
+    }
+
+    public Builder status(OrderStatus status) {
+      this.status = status;
+      return this;
+    }
+
+    public Builder orderDateTime(LocalDateTime orderDateTime) {
+      this.orderDateTime = orderDateTime;
+      return this;
+    }
+
+    public Builder orderLineItems(List<OrderLineItem> orderLineItems) {
+      this.orderLineItems = orderLineItems;
+      return this;
+    }
+
+    public Builder deliveryAddress(String deliveryAddress) {
+      this.deliveryAddress = deliveryAddress;
+      return this;
+    }
+
+    public Builder orderTable(OrderTable orderTable) {
+      this.orderTable = orderTable;
+      return this;
+    }
+
+    public Order build() {
+      return new Order(this);
+    }
+  }
+
   public UUID getId() {
     return id;
   }

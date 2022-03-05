@@ -2,6 +2,7 @@ package kitchenpos.ui;
 
 import static kitchenpos.mocker.CoreMock.DELIVERY_ORDER;
 import static kitchenpos.mocker.CoreMock.EAT_IN_ORDER;
+import static kitchenpos.mocker.CoreMock.ORDER_LIST;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -331,11 +332,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_findAll_Orders() throws Exception {
     // 준비
-    Order clonedEatInOrder = new Order(EAT_IN_ORDER);
-    Order clonedDeliveryOrder = new Order(DELIVERY_ORDER);
-    List<Order> orderList = List.of(clonedEatInOrder, clonedDeliveryOrder);
-
-    given(orderService.findAll()).willReturn(orderList);
+    given(orderService.findAll()).willReturn(ORDER_LIST);
 
     // 실행
     ResultActions perform = mockMvc.perform(get("/api/orders")
@@ -343,12 +340,12 @@ public class OrderRestControllerTest {
 
     // 검증
     perform.andExpect(status().isOk())
-        .andExpect(jsonPath("$.[0].id").value(clonedEatInOrder.getId().toString()))
-        .andExpect(jsonPath("$.[0].type").value(clonedEatInOrder.getType().toString()))
-        .andExpect(jsonPath("$.[0].status").value(clonedEatInOrder.getStatus().toString()))
-        .andExpect(jsonPath("$.[1].id").value(clonedDeliveryOrder.getId().toString()))
-        .andExpect(jsonPath("$.[1].type").value(clonedDeliveryOrder.getType().toString()))
-        .andExpect(jsonPath("$.[1].status").value(clonedDeliveryOrder.getStatus().toString()))
-        .andExpect(jsonPath("$.[1].deliveryAddress").value(clonedDeliveryOrder.getDeliveryAddress()));
+        .andExpect(jsonPath("$.[0].id").value(EAT_IN_ORDER.getId().toString()))
+        .andExpect(jsonPath("$.[0].type").value(EAT_IN_ORDER.getType().toString()))
+        .andExpect(jsonPath("$.[0].status").value(EAT_IN_ORDER.getStatus().toString()))
+        .andExpect(jsonPath("$.[1].id").value(DELIVERY_ORDER.getId().toString()))
+        .andExpect(jsonPath("$.[1].type").value(DELIVERY_ORDER.getType().toString()))
+        .andExpect(jsonPath("$.[1].status").value(DELIVERY_ORDER.getStatus().toString()))
+        .andExpect(jsonPath("$.[1].deliveryAddress").value(DELIVERY_ORDER.getDeliveryAddress()));
   }
 }

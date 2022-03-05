@@ -64,12 +64,14 @@ public class CoreMock {
       .seq(1L)
       .product(PRODUCT_1)
       .quantity(QUANTITY_OF_MENU_1)
+      .productId(PRODUCT_1.getId())
       .build();
 
   public static final MenuProduct MENU_PRODUCT_2 = new MenuProduct.Builder()
       .seq(2L)
       .product(PRODUCT_2)
       .quantity(QUANTITY_OF_MENU_2)
+      .productId(PRODUCT_2.getId())
       .build();
 
   public static final Menu MENU_1 = new Menu.Builder()
@@ -79,6 +81,7 @@ public class CoreMock {
       .menuGroup(MENU_GROUP)
       .displayed(true)
       .menuProducts(List.of(MENU_PRODUCT_1, MENU_PRODUCT_1))
+      .menuGroupId(MENU_GROUP.getId())
       .build();
 
   public static final Menu MENU_2 = new Menu.Builder()
@@ -88,21 +91,28 @@ public class CoreMock {
       .menuGroup(MENU_GROUP)
       .displayed(true)
       .menuProducts(List.of(MENU_PRODUCT_2, MENU_PRODUCT_2))
+      .menuGroupId(MENU_GROUP.getId())
       .build();
 
   public static final List<Menu> MENU_LIST = List.of(MENU_1, MENU_2);
+
+  public static final List<UUID> MENU_ID_LIST = List.of(MENU_1.getId(), MENU_2.getId());
 
   // OrderLineItem
   public static final OrderLineItem ORDER_LINE_ITEM_1 = new OrderLineItem.Builder()
       .seq(1L)
       .menu(MENU_1)
       .quantity(QUANTITY_OF_ORDER_LINE_ITEM_1)
+      .menuId(MENU_1.getId())
+      .price(MENU_1.getPrice())
       .build();
 
   public static final OrderLineItem ORDER_LINE_ITEM_2 = new OrderLineItem.Builder()
       .seq(2L)
       .menu(MENU_2)
       .quantity(QUANTITY_OF_ORDER_LINE_ITEM_2)
+      .menuId(MENU_2.getId())
+      .price(MENU_2.getPrice())
       .build();
 
   public static final List<OrderLineItem> ORDER_LINE_ITEM_LIST = List.of(ORDER_LINE_ITEM_1, ORDER_LINE_ITEM_2);
@@ -122,6 +132,8 @@ public class CoreMock {
       .status(OrderStatus.WAITING)
       .orderDateTime(CURRENT_TIME)
       .orderLineItems(ORDER_LINE_ITEM_LIST)
+      .orderTable(ORDER_TABLE)
+      .orderTableId(ORDER_TABLE.getId())
       .build();
 
 
@@ -133,4 +145,6 @@ public class CoreMock {
       .orderLineItems(ORDER_LINE_ITEM_LIST)
       .deliveryAddress(DELIVERY_ADDRESS)
       .build();
+
+  public static final List<Order> ORDER_LIST = List.of(EAT_IN_ORDER, DELIVERY_ORDER);
 }

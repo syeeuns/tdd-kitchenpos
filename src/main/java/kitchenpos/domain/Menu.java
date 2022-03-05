@@ -179,7 +179,7 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
-        return getMenuGroup().getId();
+        return menuGroupId;
     }
 
     public void setMenuGroupId(final UUID menuGroupId) {

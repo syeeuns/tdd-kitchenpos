@@ -104,7 +104,7 @@ public class MenuProduct {
     }
 
     public UUID getProductId() {
-        return getProduct().getId();
+        return productId;
     }
 
     public void setProductId(final UUID productId) {

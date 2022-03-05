@@ -1,6 +1,7 @@
 package kitchenpos.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,6 +45,8 @@ public class OrderLineItem {
         this.seq = builder.seq;
         this.menu = builder.menu;
         this.quantity = builder.quantity;
+        this.menuId = builder.menuId;
+        this.price = builder.price;
     }
 
     public static class Builder {
@@ -51,6 +54,8 @@ public class OrderLineItem {
         private Long seq;
         private Menu menu;
         private long quantity;
+        private UUID menuId;
+        private BigDecimal price;
 
         public Builder() {
         }
@@ -67,6 +72,16 @@ public class OrderLineItem {
 
         public Builder quantity(long quantity) {
             this.quantity = quantity;
+            return this;
+        }
+
+        public Builder menuId(UUID menuId) {
+            this.menuId = menuId;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
             return this;
         }
 
@@ -113,5 +128,23 @@ public class OrderLineItem {
 
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        OrderLineItem that = (OrderLineItem) o;
+        return quantity == that.quantity
+            && Objects.equals(seq, that.seq)
+            && menu.equals(that.menu);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq, menu, quantity);
     }
 }

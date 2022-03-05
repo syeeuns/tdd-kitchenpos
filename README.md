@@ -38,7 +38,7 @@
 - [ ] `Order`전체 목록을 조회할 수 있다.
 - [ ] `Order`의 `status`를 변경할 수 있다.
 - 
-- [ ] `type`은 반드시 존재해야한다. (`Exception`)
+- [ ] `type`은 반드시 존재해야한다. (`Excep**tion`)
 - [x] `type`은 `DELIVERY`, `TAKEOUT`, `EAT_IN` 중 하나이어야한다.
 - [ ] `type`이 `EAT_IN`인 경우, `orderLineItem`의 `quantity`는 0 이상이어야 한다. (`Exception`)
 - [ ] `oderLineItem`의 `menuId`에 해당하는 `Menu`는 `displayed`가 `true`여야한다. (`Exception`)

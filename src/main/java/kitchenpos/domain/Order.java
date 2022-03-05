@@ -2,6 +2,7 @@ package kitchenpos.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -101,6 +102,7 @@ public class Order {
     private List<OrderLineItem> orderLineItems;
     private String deliveryAddress;
     private OrderTable orderTable;
+    private UUID orderTableId;
 
     public Builder() {
     }
@@ -137,6 +139,11 @@ public class Order {
 
     public Builder orderTable(OrderTable orderTable) {
       this.orderTable = orderTable;
+      return this;
+    }
+
+    public Builder orderTableId(UUID orderTableId) {
+      this.orderTableId = orderTableId;
       return this;
     }
 
@@ -207,5 +214,27 @@ public class Order {
 
   public void setOrderTableId(final UUID orderTableId) {
     this.orderTableId = orderTableId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Order order = (Order) o;
+    return Objects.equals(id, order.id) && type == order.type
+        && status == order.status
+        && Objects.equals(orderDateTime, order.orderDateTime)
+        && orderLineItems.equals(order.orderLineItems)
+        && deliveryAddress.equals(order.deliveryAddress)
+        && orderTable.equals(order.orderTable);
+  }
+  @Override
+  public int hashCode() {
+    return Objects
+        .hash(id, type, status, orderDateTime, orderLineItems, deliveryAddress, orderTable);
   }
 }

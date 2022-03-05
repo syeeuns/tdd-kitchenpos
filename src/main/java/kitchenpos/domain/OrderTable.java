@@ -1,6 +1,7 @@
 package kitchenpos.domain;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -123,11 +124,20 @@ public class OrderTable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OrderTable that = (OrderTable) o;
-    return numberOfGuests == that.numberOfGuests && empty == that.empty && Objects.equals(
-        id, that.id) && Objects.equals(name, that.name);
-  }
 
+    if (numberOfGuests == 0) {
+      OrderTable that = (OrderTable) o;
+      return numberOfGuests == that.numberOfGuests
+          && empty == that.empty
+          && id.equals(that.id)
+          && name.equals(that.name);
+    }
+
+    OrderTable that = (OrderTable) o;
+    return empty == that.empty
+        && id.equals(that.id)
+        && name.equals(that.name);
+  }
 
   @Override
   public int hashCode() {

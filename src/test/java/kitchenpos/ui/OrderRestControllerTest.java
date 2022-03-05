@@ -1,5 +1,7 @@
 package kitchenpos.ui;
 
+import static kitchenpos.mocker.CoreMock.DELIVERY_ORDER;
+import static kitchenpos.mocker.CoreMock.EAT_IN_ORDER;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -10,16 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.application.OrderService;
-import kitchenpos.domain.Menu;
 import kitchenpos.domain.Order;
 import kitchenpos.domain.OrderStatus;
-import kitchenpos.domain.OrderType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,49 +32,23 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(OrderRestController.class)
 public class OrderRestControllerTest {
 
-  public static final String DELIVERY_ADDRESS = "서울특별시 삼성동 512";
 
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
   @MockBean private OrderService orderService;
 
-  private static Order basicOrder;
-  private static Order deliveryOrder;
-  private static Order eatInOrder;
-  private static Order takeoutOrder;
-
-  @BeforeAll
-  static void setUp() {
-    basicOrder = new Order(
-        UUID.randomUUID(),
-        null,
-        // 테스트별도 유동적으로 넣어준다.
-        null,
-        LocalDateTime.now(),
-        // TODO: 공통적으로 쓸 Menu, Order 등을 어딘가에 static final로 빼주기
-        null,
-        null,
-        null
-    );
-
-    eatInOrder = new Order(basicOrder);
-    eatInOrder.setType(OrderType.EAT_IN);
-
-    deliveryOrder = new Order(basicOrder);
-    deliveryOrder.setType(OrderType.DELIVERY);
-  }
 
   @DisplayName("주문 생성 -> 성공")
   @Test
   void SHOULD_success_WHEN_create_Order() throws Exception {
     // 준비
-    given(orderService.create(any())).willReturn(eatInOrder);
+    given(orderService.create(any())).willReturn(EAT_IN_ORDER);
 
     // 실행
     ResultActions perform = mockMvc.perform(
         post("/api/orders")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(eatInOrder))
+            .content(objectMapper.writeValueAsString(EAT_IN_ORDER))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
@@ -85,10 +56,11 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForCreate() {
-    Order orderWithoutType = new Order(basicOrder);
+
+    Order orderWithoutType = new Order(EAT_IN_ORDER);
     orderWithoutType.setType(null);
 
-    Order deliveryOrderWithoutAddress = new Order(deliveryOrder);
+    Order deliveryOrderWithoutAddress = new Order(DELIVERY_ORDER);
     deliveryOrderWithoutAddress.setDeliveryAddress(null);
 
     return Stream.of(
@@ -118,10 +90,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_accept_Order() throws Exception {
     // 준비
-    Order waitingEatInOrder = new Order(eatInOrder);
+    Order waitingEatInOrder = new Order(EAT_IN_ORDER);
     waitingEatInOrder.setStatus(OrderStatus.WAITING);
 
-    Order acceptedEatInOrder = new Order(eatInOrder);
+    Order acceptedEatInOrder = new Order(EAT_IN_ORDER);
     acceptedEatInOrder.setStatus(OrderStatus.ACCEPTED);
 
     given(orderService.accept(any())).willReturn(acceptedEatInOrder);
@@ -142,7 +114,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_fail_WHEN_accept_Order() throws Exception {
     // 준비
-    Order waitingEatInOrder = new Order(eatInOrder);
+    Order waitingEatInOrder = new Order(EAT_IN_ORDER);
     waitingEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.accept(any())).willThrow(IllegalArgumentException.class);
@@ -161,10 +133,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_serve_Order() throws Exception {
     // 준비
-    Order acceptedEatInOrder = new Order(eatInOrder);
+    Order acceptedEatInOrder = new Order(EAT_IN_ORDER);
     acceptedEatInOrder.setStatus(OrderStatus.ACCEPTED);
 
-    Order servedEatInOrder = new Order(eatInOrder);
+    Order servedEatInOrder = new Order(EAT_IN_ORDER);
     servedEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.accept(any())).willReturn(servedEatInOrder);
@@ -185,7 +157,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_fail_WHEN_serve_Order() throws Exception {
     // 준비
-    Order notAcceptedEatInOrder = new Order(eatInOrder);
+    Order notAcceptedEatInOrder = new Order(EAT_IN_ORDER);
     notAcceptedEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.serve(any())).willThrow(IllegalArgumentException.class);
@@ -204,10 +176,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_start_delivery_Order() throws Exception {
     // 준비
-    Order servedDeliveryOrder = new Order(deliveryOrder);
+    Order servedDeliveryOrder = new Order(DELIVERY_ORDER);
     servedDeliveryOrder.setStatus(OrderStatus.SERVED);
 
-    Order deliveringOrder = new Order(deliveryOrder);
+    Order deliveringOrder = new Order(DELIVERY_ORDER);
     deliveringOrder.setStatus(OrderStatus.DELIVERING);
 
     given(orderService.startDelivery(any())).willReturn(deliveringOrder);
@@ -225,19 +197,21 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForDelivery() {
-    Order notServedDeliveryOrder = new Order(deliveryOrder);
+    Order notServedDeliveryOrder = new Order(DELIVERY_ORDER);
     notServedDeliveryOrder.setStatus(OrderStatus.WAITING);
 
     return Stream.of(
-        arguments(eatInOrder, "타입이 올바르지 않은 주문"),
+        arguments(EAT_IN_ORDER, "타입이 올바르지 않은 주문"),
         arguments(notServedDeliveryOrder, "상태가 올바르지 않은 주문")
     );
   }
 
   @ParameterizedTest(name = "주문 배달 시작 -> 실패 With {1}")
   @MethodSource("wrongOrdersForDelivery")
-  void SHOULD_fail_WHEN_start_delivery_Order(Order wrongOrder, String testDescription)
-      throws Exception {
+  void SHOULD_fail_WHEN_start_delivery_Order(
+    Order wrongOrder,
+    String testDescription
+  ) throws Exception {
     // 준비
     given(orderService.startDelivery(any())).willThrow(IllegalArgumentException.class);
 
@@ -254,10 +228,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_complete_delivery_Order() throws Exception {
     // 준비
-    Order deliveringOrder = new Order(deliveryOrder);
+    Order deliveringOrder = new Order(DELIVERY_ORDER);
     deliveringOrder.setStatus(OrderStatus.DELIVERING);
 
-    Order completedDeliveryOrder = new Order(deliveryOrder);
+    Order completedDeliveryOrder = new Order(DELIVERY_ORDER);
     completedDeliveryOrder.setStatus(OrderStatus.DELIVERED);
 
     given(orderService.completeDelivery(any())).willReturn(completedDeliveryOrder);
@@ -276,8 +250,10 @@ public class OrderRestControllerTest {
 
   @ParameterizedTest(name = "주문 배달 시작 -> 실패 With {1}")
   @MethodSource("wrongOrdersForDelivery")
-  void SHOULD_fail_WHEN_complete_delivery_Order(Order wrongOrder, String testDescription)
-      throws Exception {
+  void SHOULD_fail_WHEN_complete_delivery_Order(
+    Order wrongOrder,
+    String testDescription
+  ) throws Exception {
     // 준비
     given(orderService.completeDelivery(any())).willThrow(IllegalArgumentException.class);
 
@@ -291,10 +267,10 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> ordersForComplete() {
-    Order servedEatInOrder = new Order(eatInOrder);
+    Order servedEatInOrder = new Order(EAT_IN_ORDER);
     servedEatInOrder.setStatus(OrderStatus.SERVED);
 
-    Order completedDeliveryOrder = new Order(deliveryOrder);
+    Order completedDeliveryOrder = new Order(DELIVERY_ORDER);
     completedDeliveryOrder.setStatus(OrderStatus.DELIVERED);
     return Stream.of(
         arguments(servedEatInOrder, "서빙나간 주문"),
@@ -324,10 +300,10 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForComplete() {
-    Order notDeliveredDeliveryOrder = new Order(deliveryOrder);
+    Order notDeliveredDeliveryOrder = new Order(DELIVERY_ORDER);
     notDeliveredDeliveryOrder.setStatus(OrderStatus.WAITING);
 
-    Order eatInOrderNotServed = new Order(eatInOrder);
+    Order eatInOrderNotServed = new Order(EAT_IN_ORDER);
     eatInOrderNotServed.setStatus(OrderStatus.WAITING);
 
     return Stream.of(
@@ -338,8 +314,7 @@ public class OrderRestControllerTest {
 
   @ParameterizedTest(name = "주문 완료 -> 실패 With {1}")
   @MethodSource("wrongOrdersForComplete")
-  void SHOULD_fail_WHEN_complete_Order(Order wrongOrder, String testDescription)
-      throws Exception {
+  void SHOULD_fail_WHEN_complete_Order(Order wrongOrder, String testDescription) throws Exception {
     // 준비
     given(orderService.complete(any())).willThrow(IllegalArgumentException.class);
 
@@ -356,7 +331,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_findAll_Orders() throws Exception {
     // 준비
-    Order clonedDeliveryOrder = new Order(deliveryOrder);
+    Order clonedDeliveryOrder = new Order(DELIVERY_ORDER);
     clonedDeliveryOrder.setStatus(OrderStatus.ACCEPTED);
     List<Order> orderList = List.of(clonedDeliveryOrder);
 
@@ -371,6 +346,6 @@ public class OrderRestControllerTest {
         .andExpect(jsonPath("$.[0].id").value(clonedDeliveryOrder.getId().toString()))
         .andExpect(jsonPath("$.[0].type").value(clonedDeliveryOrder.getType().toString()))
         .andExpect(jsonPath("$.[0].status").value(clonedDeliveryOrder.getStatus().toString()))
-        .andExpect(jsonPath("$.[0].deliveryAddress").value(deliveryOrder.getDeliveryAddress()));
+        .andExpect(jsonPath("$.[0].deliveryAddress").value(clonedDeliveryOrder.getDeliveryAddress()));
   }
 }

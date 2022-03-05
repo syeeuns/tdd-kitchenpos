@@ -1,12 +1,9 @@
 package kitchenpos.mocker;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 import kitchenpos.domain.Menu;
 import kitchenpos.domain.MenuGroup;
 import kitchenpos.domain.MenuProduct;
@@ -16,7 +13,7 @@ import kitchenpos.domain.OrderStatus;
 import kitchenpos.domain.OrderTable;
 import kitchenpos.domain.OrderType;
 import kitchenpos.domain.Product;
-import org.junit.jupiter.params.provider.Arguments;
+
 
 public class CoreMock {
 
@@ -39,6 +36,7 @@ public class CoreMock {
   public static final BigDecimal PRICE_OF_MENU_2 = BigDecimal.valueOf(10000);
   public static final BigDecimal NEGATIVE_PRICE = BigDecimal.valueOf(-1);
   public static final BigDecimal MAX_PRICE = BigDecimal.valueOf(Integer.MAX_VALUE);
+
   public static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
 

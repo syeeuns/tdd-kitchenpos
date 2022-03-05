@@ -329,9 +329,9 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_findAll_Orders() throws Exception {
     // 준비
+    Order clonedEatInOrder = new Order(EAT_IN_ORDER);
     Order clonedDeliveryOrder = new Order(DELIVERY_ORDER);
-    clonedDeliveryOrder.setStatus(OrderStatus.ACCEPTED);
-    List<Order> orderList = List.of(clonedDeliveryOrder);
+    List<Order> orderList = List.of(clonedEatInOrder, clonedDeliveryOrder);
 
     given(orderService.findAll()).willReturn(orderList);
 
@@ -341,9 +341,12 @@ public class OrderRestControllerTest {
 
     // 검증
     perform.andExpect(status().isOk())
-        .andExpect(jsonPath("$.[0].id").value(clonedDeliveryOrder.getId().toString()))
-        .andExpect(jsonPath("$.[0].type").value(clonedDeliveryOrder.getType().toString()))
-        .andExpect(jsonPath("$.[0].status").value(clonedDeliveryOrder.getStatus().toString()))
-        .andExpect(jsonPath("$.[0].deliveryAddress").value(clonedDeliveryOrder.getDeliveryAddress()));
+        .andExpect(jsonPath("$.[0].id").value(clonedEatInOrder.getId().toString()))
+        .andExpect(jsonPath("$.[0].type").value(clonedEatInOrder.getType().toString()))
+        .andExpect(jsonPath("$.[0].status").value(clonedEatInOrder.getStatus().toString()))
+        .andExpect(jsonPath("$.[1].id").value(clonedDeliveryOrder.getId().toString()))
+        .andExpect(jsonPath("$.[1].type").value(clonedDeliveryOrder.getType().toString()))
+        .andExpect(jsonPath("$.[1].status").value(clonedDeliveryOrder.getStatus().toString()))
+        .andExpect(jsonPath("$.[1].deliveryAddress").value(clonedDeliveryOrder.getDeliveryAddress()));
   }
 }

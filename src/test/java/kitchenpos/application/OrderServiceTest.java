@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 
 class OrderServiceTest {
 
-  public static final String DELIVERY_ADDRESS = "서울특별시 삼성동 512";
-
   OrderRepository orderRepository = mock(OrderRepository.class);
   MenuRepository menuRepository = mock(MenuRepository.class);
   OrderTableRepository orderTableRepository = mock(OrderTableRepository.class);
@@ -32,47 +30,47 @@ class OrderServiceTest {
       orderRepository, menuRepository, orderTableRepository, kitchenridersClient
   );
 
-  private static Menu menu;
-  private static Order basicOrder;
-  private static Order deliveryOrder;
-  private static Order eatInOrder;
-  private static OrderLineItem orderLineItem;
+//  private static Menu menu;
+//  private static Order basicOrder;
+//  private static Order deliveryOrder;
+//  private static Order eatInOrder;
+//  private static OrderLineItem orderLineItem;
 
 
-  @BeforeAll
-  static void setUp() {
-    basicOrder = new Order(
-        UUID.randomUUID(),
-        null,
-        // 테스트별도 유동적으로 넣어준다.
-        null,
-        LocalDateTime.now(),
-        // TODO: 공통적으로 쓸 Menu, Order 등을 어딘가에 static final로 빼주기
-        null,
-        null,
-        null
-    );
+//  @BeforeAll
+//  static void setUp() {
+//    basicOrder = new Order(
+//        UUID.randomUUID(),
+//        null,
+//        // 테스트별도 유동적으로 넣어준다.
+//        null,
+//        LocalDateTime.now(),
+//        // TODO: 공통적으로 쓸 Menu, Order 등을 어딘가에 static final로 빼주기
+//        null,
+//        null,
+//        null
+//    );
+//
+//    eatInOrder = new Order(basicOrder);
+//    eatInOrder.setType(OrderType.EAT_IN);
+//
+//    deliveryOrder = new Order(basicOrder);
+//    deliveryOrder.setType(OrderType.DELIVERY);
+//  }
 
-    eatInOrder = new Order(basicOrder);
-    eatInOrder.setType(OrderType.EAT_IN);
-
-    deliveryOrder = new Order(basicOrder);
-    deliveryOrder.setType(OrderType.DELIVERY);
-  }
-
-  @DisplayName("주문 생성 -> 성공")
-  @Test
-  void SHOULD_success_WHEN_create_Order() {
-    // 준비
-    given(menuRepository.findAllById(any())).willReturn();
-    given(menuRepository.findById(any())).willReturn();
-    given(orderTableRepository.findById(any())).willReturn();
-    given(orderRepository.save(any())).willReturn();
-
-    // 실행
-    Order newbie = orderService.create();
-
-    //검증
-    assertThat(newbie).isEqualTo();
-  }
+//  @DisplayName("주문 생성 -> 성공")
+//  @Test
+//  void SHOULD_success_WHEN_create_Order() {
+//    // 준비
+//    given(menuRepository.findAllById(any())).willReturn();
+//    given(menuRepository.findById(any())).willReturn();
+//    given(orderTableRepository.findById(any())).willReturn();
+//    given(orderRepository.save(any())).willReturn();
+//
+//    // 실행
+//    Order newbie = orderService.create();
+//
+//    //검증
+//    assertThat(newbie).isEqualTo();
+//  }
 }

@@ -1,8 +1,17 @@
 package kitchenpos.domain;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "order_line_item")
 @Entity
@@ -30,6 +39,40 @@ public class OrderLineItem {
     private BigDecimal price;
 
     public OrderLineItem() {
+    }
+    public OrderLineItem(Builder builder) {
+        this.seq = builder.seq;
+        this.menu = builder.menu;
+        this.quantity = builder.quantity;
+    }
+
+    public static class Builder {
+
+        private Long seq;
+        private Menu menu;
+        private long quantity;
+
+        public Builder() {
+        }
+
+        public Builder seq(Long seq) {
+            this.seq = seq;
+            return this;
+        }
+
+        public Builder menu(Menu menu) {
+            this.menu = menu;
+            return this;
+        }
+
+        public Builder quantity(long quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public OrderLineItem build() {
+            return new OrderLineItem(this);
+        }
     }
 
     public Long getSeq() {

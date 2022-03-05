@@ -161,9 +161,11 @@ public class OrderTableRestControllerTest {
 
   @ParameterizedTest(name = "오더 테이블 인원 변경 -> 실패 With {1}")
   @MethodSource("wrongOrderTables")
-  void SHOULD_fail_WHEN_change_number_of_guests_of_Order_table(OrderTable wrongOrderTable, String testDescription) throws Exception {
+  void SHOULD_fail_WHEN_change_number_of_guests_of_Order_table(OrderTable wrongOrderTable,
+      String testDescription) throws Exception {
     // 준비
-    given(orderTableService.changeNumberOfGuests(any(), any())).willThrow(IllegalArgumentException.class);
+    given(orderTableService.changeNumberOfGuests(any(), any()))
+        .willThrow(IllegalArgumentException.class);
 
     // 실행
     ResultActions perform = mockMvc.perform(

@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(OrderRestController.class)
 public class OrderRestControllerTest {
 
+
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
   @MockBean private OrderService orderService;
@@ -55,6 +56,7 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForCreate() {
+
     Order orderWithoutType = new Order(EAT_IN_ORDER);
     orderWithoutType.setType(null);
 

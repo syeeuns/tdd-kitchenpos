@@ -14,6 +14,7 @@ import kitchenpos.domain.OrderTable;
 import kitchenpos.domain.OrderType;
 import kitchenpos.domain.Product;
 
+
 public class CoreMock {
 
   public static final String BURGER_1 = "싸이버거";
@@ -34,6 +35,7 @@ public class CoreMock {
   public static final BigDecimal PRICE_OF_MENU_1 = BigDecimal.valueOf(9000);
   public static final BigDecimal PRICE_OF_MENU_2 = BigDecimal.valueOf(10000);
   public static final BigDecimal NEGATIVE_PRICE = BigDecimal.valueOf(-1);
+  public static final BigDecimal MAX_PRICE = BigDecimal.valueOf(Integer.MAX_VALUE);
 
   public static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
@@ -87,6 +89,8 @@ public class CoreMock {
       .displayed(true)
       .menuProducts(List.of(MENU_PRODUCT_2, MENU_PRODUCT_2))
       .build();
+
+  public static final List<Menu> MENU_LIST = List.of(MENU_1, MENU_2);
 
   // OrderLineItem
   public static final OrderLineItem ORDER_LINE_ITEM_1 = new OrderLineItem.Builder()

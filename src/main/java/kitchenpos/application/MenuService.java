@@ -57,6 +57,7 @@ public class MenuService {
             }
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
+
             sum = sum.add(
                 product.getPrice()
                     .multiply(BigDecimal.valueOf(quantity))

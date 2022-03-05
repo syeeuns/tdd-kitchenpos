@@ -1,92 +1,136 @@
 package kitchenpos.domain;
 
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
 public class OrderTable {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
+
+  @Column(name = "id", columnDefinition = "varbinary(16)")
+  @Id
+  private UUID id;
+
+  @Column(name = "name", nullable = false)
+  private String name;
+
+  @Column(name = "number_of_guests", nullable = false)
+  private int numberOfGuests;
+
+  @Column(name = "empty", nullable = false)
+  private boolean empty;
+
+  public OrderTable() {
+  }
+
+  public OrderTable(OrderTable orderTable) {
+    this.id = orderTable.id;
+    this.name = orderTable.name;
+    this.numberOfGuests = orderTable.numberOfGuests;
+    this.empty = orderTable.empty;
+  }
+
+  public OrderTable(UUID id, String name, int numberOfGuests, boolean empty) {
+    this.id = id;
+    this.name = name;
+    this.numberOfGuests = numberOfGuests;
+    this.empty = empty;
+  }
+
+  public OrderTable(Builder builder) {
+    this.id = builder.id;
+    this.name = builder.name;
+    this.numberOfGuests = builder.numberOfGuests;
+    this.empty = builder.empty;
+  }
+
+  public static class Builder {
+
     private UUID id;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
-
-    @Column(name = "empty", nullable = false)
     private boolean empty;
 
-    public OrderTable() {
+    public Builder() {
     }
 
-    public OrderTable(OrderTable orderTable) {
-        this.id = orderTable.id;
-        this.name = orderTable.name;
-        this.numberOfGuests = orderTable.numberOfGuests;
-        this.empty = orderTable.empty;
+    public Builder id(UUID id) {
+      this.id = id;
+      return this;
     }
 
-    public OrderTable(UUID id, String name, int numberOfGuests, boolean empty) {
-        this.id = id;
-        this.name = name;
-        this.numberOfGuests = numberOfGuests;
-        this.empty = empty;
+    public Builder name(String name) {
+      this.name = name;
+      return this;
     }
 
-    public UUID getId() {
-        return id;
+    public Builder numberOfGuests(int numberOfGuests) {
+      this.numberOfGuests = numberOfGuests;
+      return this;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public Builder empty(boolean empty) {
+      this.empty = empty;
+      return this;
     }
 
-    public String getName() {
-        return name;
+    public OrderTable build() {
+      return new OrderTable(this);
     }
+  }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public int getNumberOfGuests() {
-        return numberOfGuests;
-    }
+  public void setId(final UUID id) {
+    this.id = id;
+  }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public boolean isEmpty() {
-        return empty;
-    }
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-    public void setEmpty(final boolean empty) {
-        this.empty = empty;
-    }
+  public int getNumberOfGuests() {
+    return numberOfGuests;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        OrderTable that = (OrderTable) o;
-        return numberOfGuests == that.numberOfGuests && empty == that.empty && Objects.equals(
-            id, that.id) && Objects.equals(name, that.name);
-    }
+  public void setNumberOfGuests(final int numberOfGuests) {
+    this.numberOfGuests = numberOfGuests;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, numberOfGuests, empty);
+  public boolean isEmpty() {
+    return empty;
+  }
+
+  public void setEmpty(final boolean empty) {
+    this.empty = empty;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    OrderTable that = (OrderTable) o;
+    return numberOfGuests == that.numberOfGuests && empty == that.empty && Objects.equals(
+        id, that.id) && Objects.equals(name, that.name);
+  }
+
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, numberOfGuests, empty);
+  }
 }

@@ -1,10 +1,19 @@
 package kitchenpos.domain;
 
-import java.util.Objects;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "menu")
 @Entity
@@ -52,7 +61,7 @@ public class Menu {
         this.menuGroup = menu.menuGroup;
         this.displayed = menu.displayed;
         this.menuProducts = menu.menuProducts;
-        this.menuGroupId = menu.menuGroupId;
+        this.menuGroupId = menu.menuGroupId; // 삭제
     }
 
     public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed,
@@ -63,7 +72,62 @@ public class Menu {
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
+        this.menuGroupId = menuGroupId; // 삭제
+    }
+
+    public Menu(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.price = builder.price;
+        this.menuGroup = builder.menuGroup;
+        this.displayed = builder.displayed;
+        this.menuProducts = builder.menuProducts;
+    }
+
+    public static class Builder {
+        private UUID id;
+        private String name;
+        private BigDecimal price;
+        private MenuGroup menuGroup;
+        private boolean displayed;
+        private List<MenuProduct> menuProducts;
+
+        public Builder() {
+        }
+
+        public Builder id(UUID id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder menuGroup(MenuGroup menuGroup) {
+            this.menuGroup = menuGroup;
+            return this;
+        }
+
+        public Builder displayed(boolean displayed) {
+            this.displayed = displayed;
+            return this;
+        }
+
+        public Builder menuProducts(List<MenuProduct> menuProducts) {
+            this.menuProducts = menuProducts;
+            return this;
+        }
+
+        public Menu build() {
+            return new Menu(this);
+        }
     }
 
     public UUID getId() {
@@ -115,7 +179,7 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
-        return getMenuGroup().getId();
+        return menuGroupId;
     }
 
     public void setMenuGroupId(final UUID menuGroupId) {

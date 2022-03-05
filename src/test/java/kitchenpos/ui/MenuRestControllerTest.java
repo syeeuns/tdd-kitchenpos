@@ -1,5 +1,10 @@
 package kitchenpos.ui;
 
+import static kitchenpos.mocker.CoreMock.MAX_PRICE;
+import static kitchenpos.mocker.CoreMock.MENU_1;
+import static kitchenpos.mocker.CoreMock.MENU_2;
+import static kitchenpos.mocker.CoreMock.MENU_LIST;
+import static kitchenpos.mocker.CoreMock.NEGATIVE_PRICE;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,15 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.application.MenuService;
 import kitchenpos.domain.Menu;
-import kitchenpos.domain.MenuGroup;
-import kitchenpos.domain.MenuProduct;
-import kitchenpos.domain.Product;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,64 +38,42 @@ public class MenuRestControllerTest {
   @Autowired private ObjectMapper objectMapper;
   @MockBean private MenuService menuService;
 
-  private static Menu menu;
-  private static MenuGroup menuGroup;
-  private static MenuProduct menuProduct;
-  private static Product product;
-
-
-  @BeforeAll
-  static void setUp() {
-    product = new Product(UUID.randomUUID(), "싸이버거", BigDecimal.valueOf(5000));
-    menuGroup = new MenuGroup(UUID.randomUUID(), "햄버거메뉴");
-    menuProduct = new MenuProduct(1L, product, 2L, product.getId());
-    menu = new Menu(UUID.randomUUID(),
-        "싸이버거 + 싸이버거",
-        BigDecimal.valueOf(9000),
-        menuGroup,
-        true,
-        List.of(menuProduct),
-        menuGroup.getId()
-    );
-  }
 
   @DisplayName("메뉴 생성 -> 성공")
   @Test
   void SHOULD_success_WHEN_create_Menu() throws Exception {
     // 준비
-    given(menuService.create(any())).willReturn(menu);
+    given(menuService.create(any())).willReturn(MENU_1);
 
     // 실행
     ResultActions perform = mockMvc.perform(
         post("/api/menus")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(menu))
+            .content(objectMapper.writeValueAsString(MENU_1))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
     perform.andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(menu.getId().toString()))
-        .andExpect(jsonPath("name").value(menu.getName()))
-        .andExpect(jsonPath("price").value(menu.getPrice()))
-        .andExpect(jsonPath("$.menuGroup.id").value(menu.getMenuGroup().getId().toString()))
-        .andExpect(jsonPath("displayed").value(menu.isDisplayed()))
-        .andExpect(jsonPath("$.menuProducts[0].productId")
-            .value(menu.getMenuProducts().get(0).getProductId().toString()));
+        .andExpect(jsonPath("id").value(MENU_1.getId().toString()))
+        .andExpect(jsonPath("name").value(MENU_1.getName()))
+        .andExpect(jsonPath("price").value(MENU_1.getPrice()))
+        .andExpect(jsonPath("$.menuGroup.id").value(MENU_1.getMenuGroup().getId().toString()))
+        .andExpect(jsonPath("displayed").value(MENU_1.isDisplayed()));
   }
 
   @DisplayName("메뉴 숨기기 -> 성공")
   @Test
   void SHOULD_success_WHEN_hide_Menu() throws Exception {
-    Menu clonedMenu = new Menu(menu);
-    clonedMenu.setDisplayed(false);
+    Menu notDisplayedMenu = new Menu(MENU_1);
+    notDisplayedMenu.setDisplayed(false);
     // 준비
-    given(menuService.hide(any())).willReturn(clonedMenu);
+    given(menuService.hide(any())).willReturn(notDisplayedMenu);
 
     // 실행
     ResultActions perform = mockMvc.perform(
-        put(String.format("/api/menus/%s/hide", clonedMenu.getId()))
+        put(String.format("/api/menus/%s/hide", MENU_1.getId()))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(clonedMenu))
+            .content(objectMapper.writeValueAsString(MENU_1))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
@@ -106,36 +83,31 @@ public class MenuRestControllerTest {
 
   static Stream<Arguments> wrongMenus() {
     // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithoutName = new Menu(menu);
-    menuWithoutName.setName("");
+    Menu menuWithoutName = new Menu(MENU_1);
+    menuWithoutName.setName(null);
 
-    Menu menuWithoutPrice = new Menu(menu);
+    Menu menuWithoutPrice = new Menu(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNagtivePrice = new Menu(menu);
-    menuWithNagtivePrice.setPrice(BigDecimal.valueOf(-1));
+    Menu menuWithNegativePrice = new Menu(MENU_1);
+    menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(menu);
-    menuWithOverPrice.setPrice(BigDecimal.valueOf(Integer.MAX_VALUE));
+    Menu menuWithOverPrice = new Menu(MENU_1);
+    menuWithOverPrice.setPrice(MAX_PRICE);
 
-    Menu menuWithZeroQuantity = new Menu(menu);
+    Menu menuWithZeroQuantity = new Menu(MENU_1);
     menuWithZeroQuantity.getMenuProducts().get(0).setQuantity(0);
 
-    Menu menuWithProfanity = new Menu(menu);
+    Menu menuWithProfanity = new Menu(MENU_1);
     menuWithProfanity.setName("예니");
-
-//    BigDecimal overPrice = BigDecimal.valueOf(0);
-//    for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//      overPrice = overPrice.add(menuProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
-//    }
 
     return Stream.of(
         arguments(menuWithoutName, "빈 이름"),
-        arguments(menuWithNagtivePrice, "가격 없음"),
-        arguments(menuWithNagtivePrice, "음수 가격"),
+        arguments(menuWithNegativePrice, "가격 없음"),
+        arguments(menuWithNegativePrice, "음수 가격"),
         arguments(menuWithOverPrice, "창렬 가격"),
         arguments(menuWithZeroQuantity, "상품 갯수 0"),
-        arguments(menuWithZeroQuantity, "욕설")
+        arguments(menuWithProfanity, "욕설")
         );
   }
 
@@ -156,21 +128,19 @@ public class MenuRestControllerTest {
     perform.andExpect(status().is4xxClientError());
   }
 
-
-
   @DisplayName("메뉴 보이기 -> 성공")
   @Test
   void SHOULD_success_WHEN_display_Menu() throws Exception {
-    Menu clonedMenu = new Menu(menu);
-    clonedMenu.setDisplayed(true);
+    Menu notDisplayedMenu = new Menu(MENU_1);
+    notDisplayedMenu.setDisplayed(false);
     // 준비
-    given(menuService.display(any())).willReturn(clonedMenu);
+    given(menuService.display(any())).willReturn(MENU_1);
 
     // 실행
     ResultActions perform = mockMvc.perform(
-        put(String.format("/api/menus/%s/display", clonedMenu.getId()))
+        put(String.format("/api/menus/%s/display", notDisplayedMenu.getId()))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(clonedMenu))
+            .content(objectMapper.writeValueAsString(MENU_1))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
@@ -181,39 +151,37 @@ public class MenuRestControllerTest {
   @DisplayName("메뉴 가격 수정 -> 성공")
   @Test
   void SHOULD_success_WHEN_change_price_of_Menu() throws Exception {
-    Menu clonedMenu = new Menu(menu);
+    Menu priceChangedMenu = new Menu(MENU_1);
 
-    final BigDecimal CHANGED_PRICE = BigDecimal.valueOf(8000);
-    clonedMenu.setPrice(CHANGED_PRICE);
+    priceChangedMenu.setPrice(BigDecimal.TEN);
     // 준비
-    given(menuService.changePrice(any(), any())).willReturn(clonedMenu);
+    given(menuService.changePrice(any(), any())).willReturn(priceChangedMenu);
 
     // 실행
     ResultActions perform = mockMvc.perform(
-        put(String.format("/api/menus/%s/price", clonedMenu.getId()))
+        put(String.format("/api/menus/%s/price", MENU_1.getId()))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(clonedMenu))
+            .content(objectMapper.writeValueAsString(MENU_1))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
     perform.andExpect(status().isOk())
-        .andExpect(jsonPath("price").value(CHANGED_PRICE));
+        .andExpect(jsonPath("price").value(BigDecimal.TEN));
   }
 
   static Stream<Arguments> wrongPriceOfMenu() {
-    // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithoutPrice = new Menu(menu);
+    Menu menuWithoutPrice = new Menu(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNagtivePrice = new Menu(menu);
-    menuWithNagtivePrice.setPrice(BigDecimal.valueOf(-1));
+    Menu menuWithNegativePrice = new Menu(MENU_1);
+    menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(menu);
-    menuWithOverPrice.setPrice(BigDecimal.valueOf(Integer.MAX_VALUE));
+    Menu menuWithOverPrice = new Menu(MENU_1);
+    menuWithOverPrice.setPrice(MAX_PRICE);
 
     return Stream.of(
-        arguments(menuWithNagtivePrice, "가격 없음"),
-        arguments(menuWithNagtivePrice, "음수 가격"),
+        arguments(menuWithNegativePrice, "가격 없음"),
+        arguments(menuWithNegativePrice, "음수 가격"),
         arguments(menuWithOverPrice, "창렬 가격")
     );
   }
@@ -228,7 +196,7 @@ public class MenuRestControllerTest {
     ResultActions perform = mockMvc.perform(
         put(String.format("/api/menus/%s/price", wrongMenu.getId()))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(menu))
+            .content(objectMapper.writeValueAsString(wrongMenu))
             .accept(MediaType.APPLICATION_JSON));
 
     // 검증
@@ -239,9 +207,7 @@ public class MenuRestControllerTest {
   @Test
   void SHOULD_success_WHEN_findAll_Menus() throws Exception {
     // 준비
-    List<Menu> menuList = List.of(menu);
-
-    given(menuService.findAll()).willReturn(menuList);
+    given(menuService.findAll()).willReturn(MENU_LIST);
 
     // 실행
     ResultActions perform = mockMvc.perform(get("/api/menus")
@@ -249,12 +215,15 @@ public class MenuRestControllerTest {
 
     // 검증
     perform.andExpect(status().isOk())
-        .andExpect(jsonPath("$.[0].id").value(menu.getId().toString()))
-        .andExpect(jsonPath("$.[0].name").value(menu.getName()))
-        .andExpect(jsonPath("$.[0].price").value(menu.getPrice()))
-        .andExpect(jsonPath("$.[0].menuGroup.id").value(menu.getMenuGroup().getId().toString()))
-        .andExpect(jsonPath("$.[0].displayed").value(menu.isDisplayed()))
-        .andExpect(jsonPath("$.[0].menuProducts[0].productId")
-            .value(menu.getMenuProducts().get(0).getProductId().toString()));
+        .andExpect(jsonPath("$.[0].id").value(MENU_1.getId().toString()))
+        .andExpect(jsonPath("$.[0].name").value(MENU_1.getName()))
+        .andExpect(jsonPath("$.[0].price").value(MENU_1.getPrice()))
+        .andExpect(jsonPath("$.[0].menuGroup.id").value(MENU_1.getMenuGroup().getId().toString()))
+        .andExpect(jsonPath("$.[0].displayed").value(MENU_1.isDisplayed()))
+        .andExpect(jsonPath("$.[1].id").value(MENU_2.getId().toString()))
+        .andExpect(jsonPath("$.[1].name").value(MENU_2.getName()))
+        .andExpect(jsonPath("$.[1].price").value(MENU_2.getPrice()))
+        .andExpect(jsonPath("$.[1].menuGroup.id").value(MENU_2.getMenuGroup().getId().toString()))
+        .andExpect(jsonPath("$.[1].displayed").value(MENU_2.isDisplayed()));
   }
 }

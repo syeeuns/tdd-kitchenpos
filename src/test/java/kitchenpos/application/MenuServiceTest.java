@@ -20,10 +20,6 @@ import kitchenpos.domain.MenuGroupRepository;
 import kitchenpos.domain.MenuRepository;
 import kitchenpos.domain.ProductRepository;
 import kitchenpos.infra.PurgomalumClient;
-<<<<<<< HEAD
-import org.junit.jupiter.api.BeforeAll;
-=======
->>>>>>> b42dab7d046470dfe6f92b636291374042c03b41
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

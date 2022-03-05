@@ -85,7 +85,7 @@ class MenuServiceTest {
     menuWithoutPrice.setPrice(null);
 
     Menu menuWithNagtivePrice = new Menu(menu);
-    menuWithNagtivePrice.setPrice(BigDecimal.valueOf(-1));
+    menuWithNagtivePrice.setPrice(BigDecimal.valueOf(-1)git );
 
     Menu menuWithOverPrice = new Menu(menu);
     menuWithOverPrice.setPrice(BigDecimal.valueOf(Integer.MAX_VALUE));
@@ -99,7 +99,7 @@ class MenuServiceTest {
 //    BigDecimal overPrice = BigDecimal.valueOf(0);
 //    for (final MenuProduct menuProduct : menu.getMenuProducts()) {
 //      overPrice = overPrice.add(menuProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
-//    }
+//    }git
 
     return Stream.of(
         arguments(menuWithEmptyName,  "빈 이름"),

@@ -29,13 +29,6 @@ class ProductServiceTest {
   PurgomalumClient purgomalumClient = mock(PurgomalumClient.class);
   ProductService productService = new ProductService(productRepository, menuRepository, purgomalumClient);
 
-//  private Product product;
-
-
-//  @BeforeEach
-//  void setUp() {
-//    product = new Product(UUID.randomUUID(), "싸이버거", BigDecimal.valueOf(5000));
-//  }
 
   @DisplayName("상품 생성 -> 성공")
   @Test

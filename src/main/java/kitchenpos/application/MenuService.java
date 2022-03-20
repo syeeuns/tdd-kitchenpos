@@ -71,13 +71,16 @@ public class MenuService {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
+
+        final Menu menu = new Menu.Builder()
+            .id(UUID.randomUUID())
+            .name(name)
+            .price(price)
+            .menuGroup(menuGroup)
+            .displayed(request.isDisplayed())
+            .menuProducts(menuProducts)
+            .build();
+
         return menuRepository.save(menu);
     }
 
@@ -97,7 +100,7 @@ public class MenuService {
                 throw new IllegalArgumentException();
             }
         }
-        menu.setPrice(price);
+        menu.changePrice(price);
         return menu;
     }
 
@@ -114,7 +117,7 @@ public class MenuService {
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
-        menu.setDisplayed(true);
+        menu.changeDisplayed(true);
         return menu;
     }
 
@@ -122,7 +125,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.changeDisplayed(false);
         return menu;
     }
 

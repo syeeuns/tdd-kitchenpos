@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.application.ProductService;
 import kitchenpos.domain.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -88,7 +87,7 @@ public class ProductRestControllerTest {
   void SHOULD_success_WHEN_change_price_of_Product() throws Exception{
     // 준비
     final BigDecimal CHANGED_PRICE = BigDecimal.valueOf(10000);
-    Product priceChangedProduct = new Product(PRODUCT_1);
+    Product priceChangedProduct = Product.of(PRODUCT_1);
     priceChangedProduct.setPrice(CHANGED_PRICE);
 
     given(productService.changePrice(any(), any())).willReturn(priceChangedProduct);
@@ -109,7 +108,7 @@ public class ProductRestControllerTest {
   void SHOULD_fail_WHEN_change_price_of_Product() throws Exception{
     // 준비
     final BigDecimal CHANGED_PRICE = NEGATIVE_PRICE;
-    Product priceChangedProduct = new Product(PRODUCT_1);
+    Product priceChangedProduct = Product.of(PRODUCT_1);
     priceChangedProduct.setPrice(CHANGED_PRICE);
 
     given(productService.changePrice(any(), any())).willThrow(IllegalArgumentException.class);

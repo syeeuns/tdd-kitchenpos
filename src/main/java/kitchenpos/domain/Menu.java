@@ -82,6 +82,7 @@ public class Menu {
         this.menuGroup = builder.menuGroup;
         this.displayed = builder.displayed;
         this.menuProducts = builder.menuProducts;
+        this.menuGroupId = builder.menuGroupId;
     }
 
     public static class Builder {
@@ -91,6 +92,7 @@ public class Menu {
         private MenuGroup menuGroup;
         private boolean displayed;
         private List<MenuProduct> menuProducts;
+        private UUID menuGroupId;
 
         public Builder() {
         }
@@ -122,6 +124,11 @@ public class Menu {
 
         public Builder menuProducts(List<MenuProduct> menuProducts) {
             this.menuProducts = menuProducts;
+            return this;
+        }
+
+        public Builder menuGroupId(UUID menuGroupId) {
+            this.menuGroupId = menuGroupId;
             return this;
         }
 

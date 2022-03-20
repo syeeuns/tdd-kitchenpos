@@ -43,7 +43,7 @@ public class MenuRestControllerTest {
   @Test
   void SHOULD_success_WHEN_create_Menu() throws Exception {
     // 준비
-    given(menuService.create(any())).willReturn(MENU_1);
+    given(menuService.create(MENU_1)).willReturn(MENU_1);
 
     // 실행
     ResultActions perform = mockMvc.perform(

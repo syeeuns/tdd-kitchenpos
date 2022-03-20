@@ -42,19 +42,21 @@ public class MenuProduct {
         this.seq = seq;
         this.product = product;
         this.quantity = quantity;
-        this.productId = productId; // 삭제
+        this.productId = productId;
     }
 
     public MenuProduct(Builder builder) {
         this.seq = builder.seq;
         this.product = builder.product;
         this.quantity = builder.quantity;
+        this.productId = builder.productId;
     }
 
     public static class Builder {
         private Long seq;
         private Product product;
         private long quantity;
+        private UUID productId;
 
         public Builder() {
         }
@@ -71,6 +73,11 @@ public class MenuProduct {
 
         public Builder quantity(long quantity) {
             this.quantity = quantity;
+            return this;
+        }
+
+        public Builder productId(UUID productId) {
+            this.productId = productId;
             return this;
         }
 

@@ -63,6 +63,73 @@ public class Menu {
         this.menuGroupId = builder.menuGroupId;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void changePrice(final BigDecimal price) {
+        setPrice(price);
+    }
+
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void changeDisplayed(final boolean displayed) {
+        setDisplayed(displayed);
+    }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
+    }
+
+    public UUID getMenuGroupId() {
+        return menuGroupId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Menu menu = (Menu) o;
+        return displayed == menu.displayed
+            && Objects.equals(id, menu.id)
+            && Objects.equals(name, menu.name)
+            && Objects.equals(price, menu.price)
+            && menuGroup.equals(menu.menuGroup)
+            && Objects.equals(menuProducts, menu.menuProducts);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price, menuGroup, displayed, menuProducts);
+    }
+
+    public boolean isValidPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = menuProduct.getProduct()
+                .getPrice()
+                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
+        }
+        return price.compareTo(sum) > 0;
+    }
+
     public static class Builder {
         private UUID id;
         private String name;
@@ -115,80 +182,11 @@ public class Menu {
         }
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
+    private void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
+    private void setDisplayed(final boolean displayed) {
         this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Menu menu = (Menu) o;
-        return displayed == menu.displayed
-            && Objects.equals(id, menu.id)
-            && Objects.equals(name, menu.name)
-            && Objects.equals(price, menu.price)
-            && menuGroup.equals(menu.menuGroup)
-            && Objects.equals(menuProducts, menu.menuProducts);
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price, menuGroup, displayed, menuProducts);
     }
 }

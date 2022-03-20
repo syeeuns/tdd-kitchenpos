@@ -66,7 +66,7 @@ public class MenuRestControllerTest {
   @Test
   void SHOULD_success_WHEN_hide_Menu() throws Exception {
     Menu notDisplayedMenu = CoreMock.copy(MENU_1);
-    notDisplayedMenu.setDisplayed(false);
+    notDisplayedMenu.changeDisplayed(false);
     // 준비
     given(menuService.hide(any())).willReturn(notDisplayedMenu);
 
@@ -82,58 +82,58 @@ public class MenuRestControllerTest {
         .andExpect(jsonPath("displayed").value(false));
   }
 
-  static Stream<Arguments> wrongMenus() {
-    // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithoutName = CoreMock.copy(MENU_1);
-    menuWithoutName.setName(null);
-
-    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
-    menuWithoutPrice.setPrice(null);
-
-    Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
-    menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
-
-    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
-    menuWithOverPrice.setPrice(MAX_PRICE);
-
-    Menu menuWithZeroQuantity = CoreMock.copy(MENU_1);
-    menuWithZeroQuantity.getMenuProducts().get(0).setQuantity(0);
-
-    Menu menuWithProfanity = CoreMock.copy(MENU_1);
-    menuWithProfanity.setName("예니");
-
-    return Stream.of(
-        arguments(menuWithoutName, "빈 이름"),
-        arguments(menuWithNegativePrice, "가격 없음"),
-        arguments(menuWithNegativePrice, "음수 가격"),
-        arguments(menuWithOverPrice, "창렬 가격"),
-        arguments(menuWithZeroQuantity, "상품 갯수 0"),
-        arguments(menuWithProfanity, "욕설")
-        );
-  }
-
-  @ParameterizedTest(name = "메뉴 생성 -> 실패 With {1}")
-  @MethodSource("wrongMenus")
-  void SHOULD_fail_WHEN_create_Menu(Menu wrongMenu, String testDescription) throws Exception {
-    // 준비
-    given(menuService.create(any())).willThrow(IllegalArgumentException.class);
-
-    // 실행
-    ResultActions perform = mockMvc.perform(
-        post("/api/menus")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(wrongMenu))
-            .accept(MediaType.APPLICATION_JSON));
-
-    // 검증
-    perform.andExpect(status().is4xxClientError());
-  }
+  // TODO: Validate 로직 만들면 주석까지 지우기
+//  static Stream<Arguments> wrongMenus() {
+//    Menu menuWithoutName = CoreMock.copy(MENU_1);
+//    menuWithoutName.setName(null);
+//
+//    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
+//    menuWithoutPrice.changePrice(null);
+//
+//    Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
+//    menuWithNegativePrice.changePrice(NEGATIVE_PRICE);
+//
+//    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
+//    menuWithOverPrice.changePrice(MAX_PRICE);
+//
+//    Menu menuWithZeroQuantity = CoreMock.copy(MENU_1);
+//    menuWithZeroQuantity.getMenuProducts().get(0).setQuantity(0);
+//
+//    Menu menuWithProfanity = CoreMock.copy(MENU_1);
+//    menuWithProfanity.setName("예니");
+//
+//    return Stream.of(
+//        arguments(menuWithoutName, "빈 이름"),
+//        arguments(menuWithNegativePrice, "가격 없음"),
+//        arguments(menuWithNegativePrice, "음수 가격"),
+//        arguments(menuWithOverPrice, "창렬 가격"),
+//        arguments(menuWithZeroQuantity, "상품 갯수 0"),
+//        arguments(menuWithProfanity, "욕설")
+//        );
+//  }
+//
+//  @ParameterizedTest(name = "메뉴 생성 -> 실패 With {1}")
+//  @MethodSource("wrongMenus")
+//  void SHOULD_fail_WHEN_create_Menu(Menu wrongMenu, String testDescription) throws Exception {
+//    // 준비
+//    given(menuService.create(any())).willThrow(IllegalArgumentException.class);
+//
+//    // 실행
+//    ResultActions perform = mockMvc.perform(
+//        post("/api/menus")
+//            .contentType(MediaType.APPLICATION_JSON)
+//            .content(objectMapper.writeValueAsString(wrongMenu))
+//            .accept(MediaType.APPLICATION_JSON));
+//
+//    // 검증
+//    perform.andExpect(status().is4xxClientError());
+//  }
 
   @DisplayName("메뉴 보이기 -> 성공")
   @Test
   void SHOULD_success_WHEN_display_Menu() throws Exception {
     Menu notDisplayedMenu = CoreMock.copy(MENU_1);
-    notDisplayedMenu.setDisplayed(false);
+    notDisplayedMenu.changeDisplayed(false);
     // 준비
     given(menuService.display(any())).willReturn(MENU_1);
 
@@ -154,7 +154,7 @@ public class MenuRestControllerTest {
   void SHOULD_success_WHEN_change_price_of_Menu() throws Exception {
     Menu priceChangedMenu = CoreMock.copy(MENU_1);
 
-    priceChangedMenu.setPrice(BigDecimal.TEN);
+    priceChangedMenu.changePrice(BigDecimal.TEN);
     // 준비
     given(menuService.changePrice(any(), any())).willReturn(priceChangedMenu);
 
@@ -172,13 +172,13 @@ public class MenuRestControllerTest {
 
   static Stream<Arguments> wrongPriceOfMenu() {
     Menu menuWithoutPrice = CoreMock.copy(MENU_1);
-    menuWithoutPrice.setPrice(null);
+    menuWithoutPrice.changePrice(null);
 
     Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
-    menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
+    menuWithNegativePrice.changePrice(NEGATIVE_PRICE);
 
     Menu menuWithOverPrice = CoreMock.copy(MENU_1);
-    menuWithOverPrice.setPrice(MAX_PRICE);
+    menuWithOverPrice.changePrice(MAX_PRICE);
 
     return Stream.of(
         arguments(menuWithNegativePrice, "가격 없음"),

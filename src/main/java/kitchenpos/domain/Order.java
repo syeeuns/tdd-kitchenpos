@@ -62,28 +62,6 @@ public class Order {
   public Order() {
   }
 
-  public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime,
-      List<OrderLineItem> orderLineItems, String deliveryAddress,
-      OrderTable orderTable) {
-    this.id = id;
-    this.type = type;
-    this.status = status;
-    this.orderDateTime = orderDateTime;
-    this.orderLineItems = orderLineItems;
-    this.deliveryAddress = deliveryAddress;
-    this.orderTable = orderTable;
-  }
-
-  public Order(Order order) {
-    this.id = order.getId();
-    this.type = order.getType();
-    this.status = order.getStatus();
-    this.orderDateTime = order.getOrderDateTime();
-    this.orderLineItems = order.getOrderLineItems();
-    this.deliveryAddress = order.getDeliveryAddress();
-    this.orderTable = order.getOrderTable();
-  }
-
   public Order(Builder builder) {
     this.id = builder.id;
     this.type = builder.type;

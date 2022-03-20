@@ -25,6 +25,7 @@ import kitchenpos.domain.OrderStatus;
 import kitchenpos.domain.OrderTable;
 import kitchenpos.domain.OrderTableRepository;
 import kitchenpos.infra.KitchenridersClient;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -81,7 +82,7 @@ class OrderServiceTest {
   @Test
   void SHOULD_success_WHEN_serve_Order() {
     // 준비
-    final Order acceptedOrder = new Order(EAT_IN_ORDER);
+    final Order acceptedOrder = CoreMock.copy(EAT_IN_ORDER);
     acceptedOrder.setStatus(OrderStatus.ACCEPTED);
 
     given(orderRepository.findById(acceptedOrder.getId()))
@@ -98,7 +99,7 @@ class OrderServiceTest {
   @Test
   void SHOULD_success_WHEN_start_delivery_Order() {
     // 준비
-    final Order servedOrder = new Order(DELIVERY_ORDER);
+    final Order servedOrder = CoreMock.copy(DELIVERY_ORDER);
     servedOrder.setStatus(OrderStatus.SERVED);
 
     given(orderRepository.findById(servedOrder.getId()))
@@ -115,7 +116,7 @@ class OrderServiceTest {
   @Test
   void SHOULD_success_WHEN_complete_delivery_Order() {
     // 준비
-    final Order deliveringOrder = new Order(DELIVERY_ORDER);
+    final Order deliveringOrder = CoreMock.copy(DELIVERY_ORDER);
     deliveringOrder.setStatus(OrderStatus.DELIVERING);
 
     given(orderRepository.findById(deliveringOrder.getId()))
@@ -129,10 +130,10 @@ class OrderServiceTest {
   }
 
   static Stream<Arguments> orders() {
-    final Order servedEatInOrder = new Order(EAT_IN_ORDER);
+    final Order servedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     servedEatInOrder.setStatus(OrderStatus.SERVED);
 
-    final Order deliveredOrder = new Order(DELIVERY_ORDER);
+    final Order deliveredOrder = CoreMock.copy(DELIVERY_ORDER);
     deliveredOrder.setStatus(OrderStatus.DELIVERED);
 
     return Stream.of(

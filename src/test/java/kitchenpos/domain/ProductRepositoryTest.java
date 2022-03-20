@@ -22,7 +22,11 @@ class ProductRepositoryTest {
 
   @BeforeEach
   void setUp() {
-    product = new Product(UUID.randomUUID(), "싸이버거", BigDecimal.valueOf(5000));
+    product = new Product.Builder()
+        .id(UUID.randomUUID())
+        .name("싸이버거")
+        .price(BigDecimal.valueOf(5000))
+        .build();
   }
 
   @DisplayName("상품 저장 -> 성공")
@@ -38,7 +42,11 @@ class ProductRepositoryTest {
   @DisplayName("상품 전체 조회 -> 성공")
   @Test
   void SHOULD_success_WHEN_findAll_Product() {
-    Product product2 = new Product(UUID.randomUUID(), "데리버거", BigDecimal.valueOf(1000));
+    Product product2 = new Product.Builder()
+        .id(UUID.randomUUID())
+        .name("데리버거")
+        .price(BigDecimal.valueOf(1000))
+        .build();
     Product saved1 = productRepository.save(product);
     Product saved2 = productRepository.save(product2);
 

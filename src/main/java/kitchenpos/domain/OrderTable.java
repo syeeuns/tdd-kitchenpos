@@ -1,7 +1,6 @@
 package kitchenpos.domain;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,13 +32,6 @@ public class OrderTable {
     this.name = orderTable.name;
     this.numberOfGuests = orderTable.numberOfGuests;
     this.empty = orderTable.empty;
-  }
-
-  public OrderTable(UUID id, String name, int numberOfGuests, boolean empty) {
-    this.id = id;
-    this.name = name;
-    this.numberOfGuests = numberOfGuests;
-    this.empty = empty;
   }
 
   public OrderTable(Builder builder) {

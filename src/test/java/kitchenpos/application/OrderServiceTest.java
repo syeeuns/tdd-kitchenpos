@@ -17,7 +17,6 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import kitchenpos.domain.Menu;
 import kitchenpos.domain.MenuRepository;
 import kitchenpos.domain.Order;
 import kitchenpos.domain.OrderRepository;
@@ -47,7 +46,7 @@ class OrderServiceTest {
   @DisplayName("주문 생성 -> 성공")
   @Test
   void SHOULD_success_WHEN_create_Order() {
-    final OrderTable notEmptyOrderTable = new OrderTable(ORDER_TABLE);
+    final OrderTable notEmptyOrderTable = CoreMock.copy(ORDER_TABLE);
     notEmptyOrderTable.setEmpty(false);
 
     // 준비

@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import kitchenpos.domain.OrderRepository;
 import kitchenpos.domain.OrderTable;
 import kitchenpos.domain.OrderTableRepository;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +46,7 @@ class OrderTableServiceTest {
   @Test
   void SHOULD_fail_WHEN_create_Order_table() {
     // 준비
-    OrderTable orderTableWithoutName = new OrderTable(ORDER_TABLE);
+    OrderTable orderTableWithoutName = CoreMock.copy(ORDER_TABLE);
     orderTableWithoutName.setName(null);
     given(orderTableRepository.save(any())).willThrow(IllegalArgumentException.class);
 
@@ -58,7 +59,7 @@ class OrderTableServiceTest {
   @Test
   void SHOULD_success_WHEN_sit_Order_table() {
     // 준비
-    OrderTable clonedOrderTable = new OrderTable(ORDER_TABLE);
+    OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.setEmpty(false);
     given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
 
@@ -73,7 +74,7 @@ class OrderTableServiceTest {
   @Test
   void SHOULD_success_WHEN_clear_Order_table() {
     // 준비
-    OrderTable clonedOrderTable = new OrderTable(ORDER_TABLE);
+    OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.setEmpty(true);
     given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
 
@@ -101,7 +102,7 @@ class OrderTableServiceTest {
   void SHOULD_success_WHEN_change_number_of_guests_of_Order_table() {
     // 준비
     final int CHANGED_NUMBER_OF_GUESTS = 10;
-    OrderTable clonedOrderTable = new OrderTable(ORDER_TABLE);
+    OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.setNumberOfGuests(CHANGED_NUMBER_OF_GUESTS);
     clonedOrderTable.setEmpty(false);
     given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
@@ -115,10 +116,10 @@ class OrderTableServiceTest {
 
   static Stream<Arguments> wrongOrderTables() {
     // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    OrderTable orderTableWithNegativeNumberOfGuests = new OrderTable(ORDER_TABLE);
+    OrderTable orderTableWithNegativeNumberOfGuests = CoreMock.copy(ORDER_TABLE);
     orderTableWithNegativeNumberOfGuests.setNumberOfGuests(-1);
 
-    OrderTable emptyOrderTable = new OrderTable(ORDER_TABLE);
+    OrderTable emptyOrderTable = CoreMock.copy(ORDER_TABLE);
     emptyOrderTable.setEmpty(true);
 
     return Stream.of(

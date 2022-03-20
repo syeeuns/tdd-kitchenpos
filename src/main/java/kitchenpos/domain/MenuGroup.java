@@ -25,6 +25,14 @@ public class MenuGroup {
         this.name = builder.name;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public static class Builder {
         private UUID id;
         private String name;
@@ -47,21 +55,6 @@ public class MenuGroup {
         }
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

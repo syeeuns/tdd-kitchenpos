@@ -82,7 +82,7 @@ class OrderServiceTest {
   void SHOULD_success_WHEN_serve_Order() {
     // 준비
     final Order acceptedOrder = CoreMock.copy(EAT_IN_ORDER);
-    acceptedOrder.setStatus(OrderStatus.ACCEPTED);
+    acceptedOrder.changeStatus(OrderStatus.ACCEPTED);
 
     given(orderRepository.findById(acceptedOrder.getId()))
         .willReturn(Optional.of(acceptedOrder));
@@ -99,7 +99,7 @@ class OrderServiceTest {
   void SHOULD_success_WHEN_start_delivery_Order() {
     // 준비
     final Order servedOrder = CoreMock.copy(DELIVERY_ORDER);
-    servedOrder.setStatus(OrderStatus.SERVED);
+    servedOrder.changeStatus(OrderStatus.SERVED);
 
     given(orderRepository.findById(servedOrder.getId()))
         .willReturn(Optional.of(servedOrder));
@@ -116,7 +116,7 @@ class OrderServiceTest {
   void SHOULD_success_WHEN_complete_delivery_Order() {
     // 준비
     final Order deliveringOrder = CoreMock.copy(DELIVERY_ORDER);
-    deliveringOrder.setStatus(OrderStatus.DELIVERING);
+    deliveringOrder.changeStatus(OrderStatus.DELIVERING);
 
     given(orderRepository.findById(deliveringOrder.getId()))
         .willReturn(Optional.of(deliveringOrder));
@@ -130,10 +130,10 @@ class OrderServiceTest {
 
   static Stream<Arguments> orders() {
     final Order servedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
-    servedEatInOrder.setStatus(OrderStatus.SERVED);
+    servedEatInOrder.changeStatus(OrderStatus.SERVED);
 
     final Order deliveredOrder = CoreMock.copy(DELIVERY_ORDER);
-    deliveredOrder.setStatus(OrderStatus.DELIVERED);
+    deliveredOrder.changeStatus(OrderStatus.DELIVERED);
 
     return Stream.of(
         arguments(servedEatInOrder, "서빙 완료된 매장 주문"),

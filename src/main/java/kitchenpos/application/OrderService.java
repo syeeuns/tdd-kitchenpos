@@ -68,28 +68,32 @@ public class OrderService {
             orderLineItem.setQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
-        Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(type);
-        order.setStatus(OrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
-        order.setOrderLineItems(orderLineItems);
+
+        Order.Builder orderBuilder = new Order.Builder()
+            .id(UUID.randomUUID())
+            .type(type)
+            .status(OrderStatus.WAITING)
+            .orderDateTime(LocalDateTime.now())
+            .orderLineItems(orderLineItems);
+
         if (type == OrderType.DELIVERY) {
             final String deliveryAddress = request.getDeliveryAddress();
             if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            order.setDeliveryAddress(deliveryAddress);
+            orderBuilder.deliveryAddress(deliveryAddress);
         }
+
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
             if (orderTable.isEmpty()) {
                 throw new IllegalStateException();
             }
-            order.setOrderTable(orderTable);
+            orderBuilder.orderTable(orderTable);
         }
-        return orderRepository.save(order);
+
+        return orderRepository.save(orderBuilder.build());
     }
 
     @Transactional
@@ -108,7 +112,7 @@ public class OrderService {
             }
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
-        order.setStatus(OrderStatus.ACCEPTED);
+        order.changeStatus(OrderStatus.ACCEPTED);
         return order;
     }
 
@@ -119,7 +123,7 @@ public class OrderService {
         if (order.getStatus() != OrderStatus.ACCEPTED) {
             throw new IllegalStateException();
         }
-        order.setStatus(OrderStatus.SERVED);
+        order.changeStatus(OrderStatus.SERVED);
         return order;
     }
 
@@ -133,7 +137,7 @@ public class OrderService {
         if (order.getStatus() != OrderStatus.SERVED) {
             throw new IllegalStateException();
         }
-        order.setStatus(OrderStatus.DELIVERING);
+        order.changeStatus(OrderStatus.DELIVERING);
         return order;
     }
 
@@ -144,7 +148,7 @@ public class OrderService {
         if (order.getStatus() != OrderStatus.DELIVERING) {
             throw new IllegalStateException();
         }
-        order.setStatus(OrderStatus.DELIVERED);
+        order.changeStatus(OrderStatus.DELIVERED);
         return order;
     }
 
@@ -164,7 +168,7 @@ public class OrderService {
                 throw new IllegalStateException();
             }
         }
-        order.setStatus(OrderStatus.COMPLETED);
+        order.changeStatus(OrderStatus.COMPLETED);
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {

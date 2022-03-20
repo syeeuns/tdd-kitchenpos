@@ -72,6 +72,64 @@ public class Order {
     this.orderTable = builder.orderTable;
   }
 
+  public UUID getId() {
+    return id;
+  }
+
+  public OrderType getType() {
+    return type;
+  }
+
+  public OrderStatus getStatus() {
+    return status;
+  }
+
+  public void changeStatus(final OrderStatus status) {
+    setStatus(status);
+  }
+
+  public LocalDateTime getOrderDateTime() {
+    return orderDateTime;
+  }
+
+  public List<OrderLineItem> getOrderLineItems() {
+    return orderLineItems;
+  }
+
+  public String getDeliveryAddress() {
+    return deliveryAddress;
+  }
+
+  public OrderTable getOrderTable() {
+    return orderTable;
+  }
+
+  public UUID getOrderTableId() {
+    return orderTableId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Order order = (Order) o;
+    return Objects.equals(id, order.id) && type == order.type
+        && status == order.status
+        && Objects.equals(orderDateTime, order.orderDateTime)
+        && orderLineItems.equals(order.orderLineItems)
+        && deliveryAddress.equals(order.deliveryAddress)
+        && orderTable.equals(order.orderTable);
+  }
+  @Override
+  public int hashCode() {
+    return Objects
+        .hash(id, type, status, orderDateTime, orderLineItems, deliveryAddress, orderTable);
+  }
+
   public static class Builder {
     private UUID id;
     private OrderType type;
@@ -130,89 +188,7 @@ public class Order {
     }
   }
 
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(final UUID id) {
-    this.id = id;
-  }
-
-  public OrderType getType() {
-    return type;
-  }
-
-  public void setType(final OrderType type) {
-    this.type = type;
-  }
-
-  public OrderStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(final OrderStatus status) {
+  private void setStatus(final OrderStatus status) {
     this.status = status;
-  }
-
-  public LocalDateTime getOrderDateTime() {
-    return orderDateTime;
-  }
-
-  public void setOrderDateTime(final LocalDateTime orderDateTime) {
-    this.orderDateTime = orderDateTime;
-  }
-
-  public List<OrderLineItem> getOrderLineItems() {
-    return orderLineItems;
-  }
-
-  public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-    this.orderLineItems = orderLineItems;
-  }
-
-  public String getDeliveryAddress() {
-    return deliveryAddress;
-  }
-
-  public void setDeliveryAddress(final String deliveryAddress) {
-    this.deliveryAddress = deliveryAddress;
-  }
-
-  public OrderTable getOrderTable() {
-    return orderTable;
-  }
-
-  public void setOrderTable(final OrderTable orderTable) {
-    this.orderTable = orderTable;
-  }
-
-  public UUID getOrderTableId() {
-    return orderTableId;
-  }
-
-  public void setOrderTableId(final UUID orderTableId) {
-    this.orderTableId = orderTableId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Order order = (Order) o;
-    return Objects.equals(id, order.id) && type == order.type
-        && status == order.status
-        && Objects.equals(orderDateTime, order.orderDateTime)
-        && orderLineItems.equals(order.orderLineItems)
-        && deliveryAddress.equals(order.deliveryAddress)
-        && orderTable.equals(order.orderTable);
-  }
-  @Override
-  public int hashCode() {
-    return Objects
-        .hash(id, type, status, orderDateTime, orderLineItems, deliveryAddress, orderTable);
   }
 }

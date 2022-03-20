@@ -21,21 +21,25 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public void isValid(String name, BigDecimal price) {
-        isValidName(name);
-        isValidPrice(price);
+    public void validate(String name, BigDecimal price) {
+        validateName(name);
+        validatePrice(price);
     }
 
-    private void isValidName(String name) {
+    private void validateName(String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
     }
 
-    private void isValidPrice(BigDecimal price) {
+    private void validatePrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public void changePrice(BigDecimal price) {
+        setPrice(price);
     }
 
     // getter, setter, constructor
@@ -43,7 +47,7 @@ public class Product {
     }
 
     public Product(Builder builder) {
-//        isValid(builder.name, builder.price);
+        validate(builder.name, builder.price);
         this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;
@@ -90,6 +94,7 @@ public class Product {
     }
 
     public void setName(final String name) {
+        validateName(name);
         this.name = name;
     }
 
@@ -97,7 +102,8 @@ public class Product {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    private void setPrice(final BigDecimal price) {
+        validatePrice(price);
         this.price = price;
     }
 

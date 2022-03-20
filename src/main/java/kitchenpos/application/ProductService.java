@@ -3,10 +3,8 @@ package kitchenpos.application;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.domain.Menu;
-import kitchenpos.domain.MenuProduct;
 import kitchenpos.domain.MenuRepository;
 import kitchenpos.domain.Product;
 import kitchenpos.domain.ProductRepository;
@@ -33,17 +31,15 @@ public class ProductService {
     @Transactional
     public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+        final Product product = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name(name)
+            .price(price)
+            .build();
         return productRepository.save(product);
     }
 
@@ -52,7 +48,7 @@ public class ProductService {
         final BigDecimal price = request.getPrice();
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             if (menu.isValidPrice()) {

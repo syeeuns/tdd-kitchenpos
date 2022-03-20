@@ -9,16 +9,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.domain.MenuRepository;
 import kitchenpos.domain.Product;
 import kitchenpos.domain.ProductRepository;
 import kitchenpos.infra.PurgomalumClient;
-import org.junit.jupiter.api.BeforeEach;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,10 +51,10 @@ class ProductServiceTest {
   }
 
   static Stream<Arguments> wrongProducts1() {
-    Product nullNameProduct = new Product(PRODUCT_1);
+    Product nullNameProduct = CoreMock.copy(PRODUCT_1);
     nullNameProduct.setName(null);
 
-    Product negativePriceProduct = new Product(PRODUCT_1);
+    Product negativePriceProduct = CoreMock.copy(PRODUCT_1);
     negativePriceProduct.setPrice(BigDecimal.valueOf(-1));
 
     return Stream.of(

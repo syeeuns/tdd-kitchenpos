@@ -1,12 +1,12 @@
 package kitchenpos.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Table(name = "product")
 @Entity
@@ -21,22 +21,40 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    public void isValid(String name, BigDecimal price) {
+        isValidName(name);
+        isValidPrice(price);
+    }
+
+    private void isValidName(String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void isValidPrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static Product of(Product product) {
+        return new Product(product.getId(), product.getName(), product.getPrice());
+    }
+
+    // getter, setter, constructor
     public Product() {
     }
 
     public Product(UUID id, String name, BigDecimal price) {
+//        isValid(name, price);
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public Product(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.price = product.getPrice();
-    }
-
     public Product(Builder builder) {
+//        isValid(builder.name, builder.price);
         this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;

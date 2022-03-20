@@ -19,14 +19,19 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
+    public ResponseEntity<Product> create(
+        @RequestBody final Product request
+    ) {
         final Product response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
+    public ResponseEntity<Product> changePrice(
+        @PathVariable final UUID productId,
+        @RequestBody final Product request
+    ) {
         return ResponseEntity.ok(productService.changePrice(productId, request));
     }
 

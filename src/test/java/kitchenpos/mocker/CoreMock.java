@@ -1,5 +1,7 @@
 package kitchenpos.mocker;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -147,4 +149,21 @@ public class CoreMock {
       .build();
 
   public static final List<Order> ORDER_LIST = List.of(EAT_IN_ORDER, DELIVERY_ORDER);
+
+  @SuppressWarnings("unchecked")
+  public static <E> E copy(E element) {
+    try {
+      Class<?> clz = element.getClass();
+      Constructor<?> cons = clz.getDeclaredConstructor();
+      E clone = (E) cons.newInstance();
+      for (Field field : clz.getDeclaredFields()) {
+        field.setAccessible(true);
+        Object data = field.get(element);
+        field.set(clone, data);
+      }
+      return clone;
+    } catch (Throwable e) {
+      throw new RuntimeException("Copy error! {}", e);
+    }
+  }
 }

@@ -20,16 +20,6 @@ public class MenuGroup {
     public MenuGroup() {
     }
 
-    public MenuGroup(UUID id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public MenuGroup(MenuGroup menuGroup) {
-        this.id = menuGroup.getId();
-        this.name = menuGroup.getName();
-    }
-
     public MenuGroup(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;

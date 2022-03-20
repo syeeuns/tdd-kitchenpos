@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import kitchenpos.application.MenuGroupService;
 import kitchenpos.domain.MenuGroup;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ class MenuGroupRestControllerTest {
   @Test
   void SHOULD_fail_WHEN_create_Menu_group() throws Exception {
     // 준비
-    MenuGroup wrongMenuGroup = new MenuGroup(MENU_GROUP);
+    MenuGroup wrongMenuGroup = CoreMock.copy(MENU_GROUP);
     wrongMenuGroup.setName("");
     given(menuGroupService.create(any())).willThrow(IllegalArgumentException.class);
 
@@ -71,8 +72,8 @@ class MenuGroupRestControllerTest {
   @Test
   void SHOULD_success_WHEN_findAll_Menu_groups() throws Exception {
     // 준비
-    MenuGroup menuGroup1 = new MenuGroup(MENU_GROUP);
-    MenuGroup menuGroup2 = new MenuGroup(MENU_GROUP);
+    MenuGroup menuGroup1 = CoreMock.copy(MENU_GROUP);
+    MenuGroup menuGroup2 = CoreMock.copy(MENU_GROUP);
     menuGroup2.setName("신메뉴");
     List<MenuGroup> menuGroupList = List.of(menuGroup1, menuGroup2);
 

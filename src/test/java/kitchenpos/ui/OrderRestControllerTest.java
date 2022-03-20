@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import kitchenpos.application.OrderService;
 import kitchenpos.domain.Order;
 import kitchenpos.domain.OrderStatus;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -58,10 +59,10 @@ public class OrderRestControllerTest {
 
   static Stream<Arguments> wrongOrdersForCreate() {
 
-    Order orderWithoutType = new Order(EAT_IN_ORDER);
+    Order orderWithoutType = CoreMock.copy(EAT_IN_ORDER);
     orderWithoutType.setType(null);
 
-    Order deliveryOrderWithoutAddress = new Order(DELIVERY_ORDER);
+    Order deliveryOrderWithoutAddress = CoreMock.copy(DELIVERY_ORDER);
     deliveryOrderWithoutAddress.setDeliveryAddress(null);
 
     return Stream.of(
@@ -91,10 +92,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_accept_Order() throws Exception {
     // 준비
-    Order waitingEatInOrder = new Order(EAT_IN_ORDER);
+    Order waitingEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     waitingEatInOrder.setStatus(OrderStatus.WAITING);
 
-    Order acceptedEatInOrder = new Order(EAT_IN_ORDER);
+    Order acceptedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     acceptedEatInOrder.setStatus(OrderStatus.ACCEPTED);
 
     given(orderService.accept(any())).willReturn(acceptedEatInOrder);
@@ -115,7 +116,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_fail_WHEN_accept_Order() throws Exception {
     // 준비
-    Order waitingEatInOrder = new Order(EAT_IN_ORDER);
+    Order waitingEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     waitingEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.accept(any())).willThrow(IllegalArgumentException.class);
@@ -134,10 +135,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_serve_Order() throws Exception {
     // 준비
-    Order acceptedEatInOrder = new Order(EAT_IN_ORDER);
+    Order acceptedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     acceptedEatInOrder.setStatus(OrderStatus.ACCEPTED);
 
-    Order servedEatInOrder = new Order(EAT_IN_ORDER);
+    Order servedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     servedEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.accept(any())).willReturn(servedEatInOrder);
@@ -158,7 +159,7 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_fail_WHEN_serve_Order() throws Exception {
     // 준비
-    Order notAcceptedEatInOrder = new Order(EAT_IN_ORDER);
+    Order notAcceptedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     notAcceptedEatInOrder.setStatus(OrderStatus.SERVED);
 
     given(orderService.serve(any())).willThrow(IllegalArgumentException.class);
@@ -177,10 +178,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_start_delivery_Order() throws Exception {
     // 준비
-    Order servedDeliveryOrder = new Order(DELIVERY_ORDER);
+    Order servedDeliveryOrder = CoreMock.copy(DELIVERY_ORDER);
     servedDeliveryOrder.setStatus(OrderStatus.SERVED);
 
-    Order deliveringOrder = new Order(DELIVERY_ORDER);
+    Order deliveringOrder = CoreMock.copy(DELIVERY_ORDER);
     deliveringOrder.setStatus(OrderStatus.DELIVERING);
 
     given(orderService.startDelivery(any())).willReturn(deliveringOrder);
@@ -198,7 +199,7 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForDelivery() {
-    Order notServedDeliveryOrder = new Order(DELIVERY_ORDER);
+    Order notServedDeliveryOrder = CoreMock.copy(DELIVERY_ORDER);
     notServedDeliveryOrder.setStatus(OrderStatus.WAITING);
 
     return Stream.of(
@@ -229,10 +230,10 @@ public class OrderRestControllerTest {
   @Test
   void SHOULD_success_WHEN_complete_delivery_Order() throws Exception {
     // 준비
-    Order deliveringOrder = new Order(DELIVERY_ORDER);
+    Order deliveringOrder = CoreMock.copy(DELIVERY_ORDER);
     deliveringOrder.setStatus(OrderStatus.DELIVERING);
 
-    Order completedDeliveryOrder = new Order(DELIVERY_ORDER);
+    Order completedDeliveryOrder = CoreMock.copy(DELIVERY_ORDER);
     completedDeliveryOrder.setStatus(OrderStatus.DELIVERED);
 
     given(orderService.completeDelivery(any())).willReturn(completedDeliveryOrder);
@@ -268,10 +269,10 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> ordersForComplete() {
-    Order servedEatInOrder = new Order(EAT_IN_ORDER);
+    Order servedEatInOrder = CoreMock.copy(EAT_IN_ORDER);
     servedEatInOrder.setStatus(OrderStatus.SERVED);
 
-    Order completedDeliveryOrder = new Order(DELIVERY_ORDER);
+    Order completedDeliveryOrder = CoreMock.copy(DELIVERY_ORDER);
     completedDeliveryOrder.setStatus(OrderStatus.DELIVERED);
     return Stream.of(
         arguments(servedEatInOrder, "서빙나간 주문"),
@@ -283,7 +284,7 @@ public class OrderRestControllerTest {
   @MethodSource("ordersForComplete")
   void SHOULD_success_WHEN_complete_Order(Order order, String testDescription) throws Exception {
     // 준비
-    Order completedOrder = new Order(order);
+    Order completedOrder = CoreMock.copy(order);
     completedOrder.setStatus(OrderStatus.COMPLETED);
 
     given(orderService.complete(any())).willReturn(completedOrder);
@@ -301,10 +302,10 @@ public class OrderRestControllerTest {
   }
 
   static Stream<Arguments> wrongOrdersForComplete() {
-    Order notDeliveredDeliveryOrder = new Order(DELIVERY_ORDER);
+    Order notDeliveredDeliveryOrder = CoreMock.copy(DELIVERY_ORDER);
     notDeliveredDeliveryOrder.setStatus(OrderStatus.WAITING);
 
-    Order eatInOrderNotServed = new Order(EAT_IN_ORDER);
+    Order eatInOrderNotServed = CoreMock.copy(EAT_IN_ORDER);
     eatInOrderNotServed.setStatus(OrderStatus.WAITING);
 
     return Stream.of(

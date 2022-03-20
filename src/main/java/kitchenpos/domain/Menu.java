@@ -51,29 +51,7 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
-    }
-
-    public Menu(Menu menu) {
-        this.id = menu.id;
-        this.name = menu.name;
-        this.price = menu.price;
-        this.menuGroup = menu.menuGroup;
-        this.displayed = menu.displayed;
-        this.menuProducts = menu.menuProducts;
-        this.menuGroupId = menu.menuGroupId; // 삭제
-    }
-
-    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed,
-        List<MenuProduct> menuProducts, UUID menuGroupId) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.menuGroup = menuGroup;
-        this.displayed = displayed;
-        this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId; // 삭제
-    }
+    public Menu() { }
 
     public Menu(Builder builder) {
         this.id = builder.id;

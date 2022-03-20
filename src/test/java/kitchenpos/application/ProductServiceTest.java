@@ -52,7 +52,13 @@ class ProductServiceTest {
 
     return Stream.of(
         arguments(nullNameProduct),
-        arguments(new Product(UUID.randomUUID(), "데리버거", BigDecimal.valueOf(-1)))
+        arguments(
+            new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("데리버거")
+                .price(BigDecimal.valueOf(-1))
+                .build()
+        )
     );
   }
 

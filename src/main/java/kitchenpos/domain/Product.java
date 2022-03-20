@@ -38,19 +38,8 @@ public class Product {
         }
     }
 
-    public static Product of(Product product) {
-        return new Product(product.getId(), product.getName(), product.getPrice());
-    }
-
     // getter, setter, constructor
     public Product() {
-    }
-
-    public Product(UUID id, String name, BigDecimal price) {
-//        isValid(name, price);
-        this.id = id;
-        this.name = name;
-        this.price = price;
     }
 
     public Product(Builder builder) {

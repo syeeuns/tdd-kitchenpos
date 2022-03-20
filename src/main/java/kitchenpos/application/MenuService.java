@@ -59,9 +59,11 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
 
             sum = sum.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct.Builder()
+                .product(product)
+                .quantity(quantity)
+                .build();
+
             menuProducts.add(menuProduct);
         }
         if (price.compareTo(sum) > 0) {

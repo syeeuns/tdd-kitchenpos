@@ -38,18 +38,45 @@ public class MenuProduct {
     public MenuProduct() {
     }
 
-    public MenuProduct(Long seq, Product product, long quantity, UUID productId) {
-        this.seq = seq;
-        this.product = product;
-        this.quantity = quantity;
-        this.productId = productId;
-    }
-
     public MenuProduct(Builder builder) {
         this.seq = builder.seq;
         this.product = builder.product;
         this.quantity = builder.quantity;
         this.productId = builder.productId;
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuProduct that = (MenuProduct) o;
+        return quantity == that.quantity
+            && seq.equals(that.seq)
+            && product.equals(that.product);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq, product, quantity);
     }
 
     public static class Builder {
@@ -84,55 +111,5 @@ public class MenuProduct {
         public MenuProduct build() {
             return new MenuProduct(this);
         }
-    }
-
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        MenuProduct that = (MenuProduct) o;
-        return quantity == that.quantity
-            && seq.equals(that.seq)
-            && product.equals(that.product);
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(seq, product, quantity);
     }
 }

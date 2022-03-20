@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 import kitchenpos.application.MenuService;
 import kitchenpos.domain.Menu;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -64,7 +65,7 @@ public class MenuRestControllerTest {
   @DisplayName("메뉴 숨기기 -> 성공")
   @Test
   void SHOULD_success_WHEN_hide_Menu() throws Exception {
-    Menu notDisplayedMenu = new Menu(MENU_1);
+    Menu notDisplayedMenu = CoreMock.copy(MENU_1);
     notDisplayedMenu.setDisplayed(false);
     // 준비
     given(menuService.hide(any())).willReturn(notDisplayedMenu);
@@ -83,22 +84,22 @@ public class MenuRestControllerTest {
 
   static Stream<Arguments> wrongMenus() {
     // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithoutName = new Menu(MENU_1);
+    Menu menuWithoutName = CoreMock.copy(MENU_1);
     menuWithoutName.setName(null);
 
-    Menu menuWithoutPrice = new Menu(MENU_1);
+    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNegativePrice = new Menu(MENU_1);
+    Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
     menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(MENU_1);
+    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
     menuWithOverPrice.setPrice(MAX_PRICE);
 
-    Menu menuWithZeroQuantity = new Menu(MENU_1);
+    Menu menuWithZeroQuantity = CoreMock.copy(MENU_1);
     menuWithZeroQuantity.getMenuProducts().get(0).setQuantity(0);
 
-    Menu menuWithProfanity = new Menu(MENU_1);
+    Menu menuWithProfanity = CoreMock.copy(MENU_1);
     menuWithProfanity.setName("예니");
 
     return Stream.of(
@@ -131,7 +132,7 @@ public class MenuRestControllerTest {
   @DisplayName("메뉴 보이기 -> 성공")
   @Test
   void SHOULD_success_WHEN_display_Menu() throws Exception {
-    Menu notDisplayedMenu = new Menu(MENU_1);
+    Menu notDisplayedMenu = CoreMock.copy(MENU_1);
     notDisplayedMenu.setDisplayed(false);
     // 준비
     given(menuService.display(any())).willReturn(MENU_1);
@@ -151,7 +152,7 @@ public class MenuRestControllerTest {
   @DisplayName("메뉴 가격 수정 -> 성공")
   @Test
   void SHOULD_success_WHEN_change_price_of_Menu() throws Exception {
-    Menu priceChangedMenu = new Menu(MENU_1);
+    Menu priceChangedMenu = CoreMock.copy(MENU_1);
 
     priceChangedMenu.setPrice(BigDecimal.TEN);
     // 준비
@@ -170,13 +171,13 @@ public class MenuRestControllerTest {
   }
 
   static Stream<Arguments> wrongPriceOfMenu() {
-    Menu menuWithoutPrice = new Menu(MENU_1);
+    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNegativePrice = new Menu(MENU_1);
+    Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
     menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(MENU_1);
+    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
     menuWithOverPrice.setPrice(MAX_PRICE);
 
     return Stream.of(

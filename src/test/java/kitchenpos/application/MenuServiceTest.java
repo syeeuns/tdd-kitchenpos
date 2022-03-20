@@ -21,9 +21,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import kitchenpos.domain.Menu;
 import kitchenpos.domain.MenuGroupRepository;
+import kitchenpos.domain.MenuProduct;
 import kitchenpos.domain.MenuRepository;
 import kitchenpos.domain.ProductRepository;
 import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,6 +50,7 @@ class MenuServiceTest {
     // 준비
     given(menuRepository.save(any())).willReturn(MENU_1);
     given(menuGroupRepository.findById(any())).willReturn(Optional.ofNullable(MENU_1.getMenuGroup()));
+    given(productRepository.findAllByIdIn(any())).willReturn(PRODUCT_LIST);
     given(productRepository.findById(PRODUCT_1.getId())).willReturn(Optional.of(PRODUCT_1));
     given(productRepository.findById(PRODUCT_2.getId())).willReturn(Optional.of(PRODUCT_2));
     given(productRepository.findAllById(any())).willReturn(PRODUCT_LIST);
@@ -60,24 +63,24 @@ class MenuServiceTest {
   }
 
   static Stream<Arguments> wrongMenus() {
-    // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    // TODO: changePrice에서 재활용할 수 있도록 생각해보기
-    Menu menuWithEmptyName = new Menu(MENU_1);
+    Menu menuWithEmptyName = CoreMock.copy(MENU_1);
     menuWithEmptyName.setName("");
 
-    Menu menuWithoutPrice = new Menu(MENU_1);
+    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNagtivePrice = new Menu(MENU_1);
+    Menu menuWithNagtivePrice = CoreMock.copy(MENU_1);
     menuWithNagtivePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(MENU_1);
+    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
     menuWithOverPrice.setPrice(MAX_PRICE);
 
-    Menu menuWithZeroQuantity = new Menu(MENU_1);
-    menuWithZeroQuantity.getMenuProducts().get(0).setQuantity(0);
+    Menu menuWithZeroQuantity = CoreMock.copy(MENU_1);
+    MenuProduct copiedMenuProduct1 = CoreMock.copy(CoreMock.MENU_PRODUCT_1);
+    copiedMenuProduct1.setQuantity(0);
+    menuWithZeroQuantity.setMenuProducts(List.of(copiedMenuProduct1, copiedMenuProduct1));
 
-    Menu menuWithProfanity = new Menu(MENU_1);
+    Menu menuWithProfanity = CoreMock.copy(MENU_1);
     menuWithProfanity.setName("예니");
 
     return Stream.of(
@@ -104,7 +107,7 @@ class MenuServiceTest {
   @Test
   void SHOULD_success_WHEN_change_price_of_Menu() {
     // 준비
-    Menu priceChangedMenu = new Menu(MENU_1);
+    Menu priceChangedMenu = CoreMock.copy(MENU_1);
     priceChangedMenu.setPrice(BigDecimal.TEN);
 
     given(menuRepository.findById(any())).willReturn(Optional.ofNullable(priceChangedMenu));
@@ -118,13 +121,13 @@ class MenuServiceTest {
 
   static Stream<Arguments> menuListWithWrongPrice() {
     // TODO: 생성자가 아니라 Builder 패턴으로 만들기
-    Menu menuWithoutPrice = new Menu(MENU_1);
+    Menu menuWithoutPrice = CoreMock.copy(MENU_1);
     menuWithoutPrice.setPrice(null);
 
-    Menu menuWithNegativePrice = new Menu(MENU_1);
+    Menu menuWithNegativePrice = CoreMock.copy(MENU_1);
     menuWithNegativePrice.setPrice(NEGATIVE_PRICE);
 
-    Menu menuWithOverPrice = new Menu(MENU_1);
+    Menu menuWithOverPrice = CoreMock.copy(MENU_1);
     menuWithOverPrice.setPrice(MAX_PRICE);
 
     return Stream.of(
@@ -145,28 +148,28 @@ class MenuServiceTest {
   }
 
   // TODO: 로직이 이상한 것 같아 더블체크 후 수정 (MenuService.display() sum 계산 부분)
-//  @DisplayName("메뉴 보이기 -> 성공")
-//  @Test
-//  void SHOULD_success_WHEN_display_Menu() {
-//    // 준비
-//    Menu notDisplayedMenu = new Menu(MENU_1);
-//    notDisplayedMenu.setDisplayed(false);
-//    given(menuRepository.findById(any())).willReturn(Optional.ofNullable(notDisplayedMenu));
-//
-//    // 실행
-//    Menu newbie = menuService.display(notDisplayedMenu.getId());
-//
-//    //검증
-//    assertThat(newbie.isDisplayed()).isEqualTo(true);
-//  }
+  @DisplayName("메뉴 보이기 -> 성공")
+  @Test
+  void SHOULD_success_WHEN_display_Menu() {
+    // 준비
+    Menu notDisplayedMenu = CoreMock.copy(MENU_1);
+    notDisplayedMenu.setDisplayed(false);
+    given(menuRepository.findById(any())).willReturn(Optional.of(notDisplayedMenu));
+
+    // 실행
+    Menu newbie = menuService.display(notDisplayedMenu.getId());
+
+    //검증
+    assertThat(newbie.isDisplayed()).isEqualTo(true);
+  }
 
   @DisplayName("메뉴 숨기기 -> 성공")
   @Test
   void SHOULD_success_WHEN_hide_Menu() {
     // 준비
-    Menu notDisplayedMenu = new Menu(MENU_1);
+    Menu notDisplayedMenu = CoreMock.copy(MENU_1);
     notDisplayedMenu.setDisplayed(false);
-    given(menuRepository.findById(any())).willReturn(Optional.ofNullable(notDisplayedMenu));
+    given(menuRepository.findById(any())).willReturn(Optional.of(notDisplayedMenu));
 
     // 실행
     Menu newbie = menuService.hide(notDisplayedMenu.getId());

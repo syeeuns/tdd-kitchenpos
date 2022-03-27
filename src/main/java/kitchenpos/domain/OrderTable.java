@@ -27,13 +27,6 @@ public class OrderTable {
   public OrderTable() {
   }
 
-  public OrderTable(OrderTable orderTable) {
-    this.id = orderTable.id;
-    this.name = orderTable.name;
-    this.numberOfGuests = orderTable.numberOfGuests;
-    this.empty = orderTable.empty;
-  }
-
   public OrderTable(Builder builder) {
     this.id = builder.id;
     this.name = builder.name;
@@ -72,7 +65,9 @@ public class OrderTable {
     }
 
     public OrderTable build() {
-      return new OrderTable(this);
+      OrderTable orderTable = new OrderTable(this);
+      orderTable.validate();
+      return orderTable;
     }
   }
 
@@ -80,15 +75,12 @@ public class OrderTable {
     return id;
   }
 
-  public void setId(final UUID id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
   }
 
-  public void setName(final String name) {
+  public void changeName(final String name) {
+    validateName(name);
     this.name = name;
   }
 
@@ -96,15 +88,16 @@ public class OrderTable {
     return numberOfGuests;
   }
 
-  public void setNumberOfGuests(final int numberOfGuests) {
+  public void changeNumberOfGuests(final int numberOfGuests) {
+    validateNumberOfGuests(numberOfGuests);
     this.numberOfGuests = numberOfGuests;
   }
 
   public boolean isEmpty() {
     return empty;
   }
-
-  public void setEmpty(final boolean empty) {
+  
+  public void changeEmpty(final boolean empty) {
     this.empty = empty;
   }
 
@@ -134,5 +127,29 @@ public class OrderTable {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, numberOfGuests, empty);
+  }
+
+  private void validate() {
+    validateName(name);
+  }
+
+  private void validateName(String name) {
+    if (isValidName(name)) {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  private boolean isValidName(String name) {
+    return Objects.isNull(name) || name.isEmpty();
+  }
+
+  private void validateNumberOfGuests(int numberOfGuests) {
+    if (isValidNumberOfGuests(numberOfGuests)) {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  private boolean isValidNumberOfGuests(int numberOfGuests) {
+    return numberOfGuests < 0;
   }
 }

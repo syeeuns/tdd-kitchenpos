@@ -21,33 +21,10 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public void validate(String name, BigDecimal price) {
-        validateName(name);
-        validatePrice(price);
-    }
-
-    private void validateName(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validatePrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void changePrice(BigDecimal price) {
-        setPrice(price);
-    }
-
-    // getter, setter, constructor
     public Product() {
     }
 
     public Product(Builder builder) {
-        validate(builder.name, builder.price);
         this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;
@@ -77,7 +54,9 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(this);
+            Product product = new Product(this);
+            product.validate();
+            return product;
         }
     }
 
@@ -85,24 +64,15 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(final String name) {
-        validateName(name);
-        this.name = name;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    private void setPrice(final BigDecimal price) {
+    public void changePrice(BigDecimal price) {
         validatePrice(price);
         this.price = price;
     }
@@ -123,5 +93,30 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, price);
+    }
+
+    private void validate() {
+        validateName(name);
+        validatePrice(price);
+    }
+
+    private void validateName(String name) {
+        if (isValidName(name)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private boolean isValidName(String name) {
+        return Objects.isNull(name) || name.isEmpty();
+    }
+
+    private void validatePrice(BigDecimal price) {
+        if (isValidPrice(price)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private boolean isValidPrice(BigDecimal price) {
+        return Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0;
     }
 }

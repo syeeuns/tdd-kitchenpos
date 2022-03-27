@@ -47,7 +47,7 @@ class OrderServiceTest {
   @Test
   void SHOULD_success_WHEN_create_Order() {
     final OrderTable notEmptyOrderTable = CoreMock.copy(ORDER_TABLE);
-    notEmptyOrderTable.setEmpty(false);
+    notEmptyOrderTable.changeEmpty(false);
 
     // 준비
     given(menuRepository.findAllByIdIn(MENU_ID_LIST)).willReturn(MENU_LIST);

@@ -2,7 +2,6 @@ package kitchenpos.application;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.domain.Menu;
 import kitchenpos.domain.MenuRepository;
@@ -46,8 +45,7 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getPrice();
-        final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+        final Product product = productRepository.fetchById(productId);
         product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {

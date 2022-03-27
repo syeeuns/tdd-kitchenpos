@@ -79,17 +79,12 @@ public class OrderTable {
     return name;
   }
 
-  public void changeName(final String name) {
-    validateName(name);
-    this.name = name;
-  }
-
   public int getNumberOfGuests() {
     return numberOfGuests;
   }
 
   public void changeNumberOfGuests(final int numberOfGuests) {
-    validateNumberOfGuests(numberOfGuests);
+    validateNumberOfGuests(this);
     this.numberOfGuests = numberOfGuests;
   }
 
@@ -99,6 +94,15 @@ public class OrderTable {
   
   public void changeEmpty(final boolean empty) {
     this.empty = empty;
+  }
+
+  public void sit() {
+    changeEmpty(false);
+  }
+
+  public void clear() {
+    changeNumberOfGuests(0);
+    changeEmpty(true);
   }
 
   @Override
@@ -133,23 +137,22 @@ public class OrderTable {
     validateName(name);
   }
 
-  private void validateName(String name) {
+  private static void validateName(String name) {
     if (isValidName(name)) {
       throw new IllegalArgumentException();
     }
   }
 
-  private boolean isValidName(String name) {
+  private static boolean isValidName(String name) {
     return Objects.isNull(name) || name.isEmpty();
   }
 
-  private void validateNumberOfGuests(int numberOfGuests) {
-    if (isValidNumberOfGuests(numberOfGuests)) {
+  private static void validateNumberOfGuests(OrderTable orderTable) {
+    if (orderTable.getNumberOfGuests() < 0) {
       throw new IllegalArgumentException();
     }
-  }
-
-  private boolean isValidNumberOfGuests(int numberOfGuests) {
-    return numberOfGuests < 0;
+    if (orderTable.getNumberOfGuests() > 0 && orderTable.isEmpty()) {
+      throw new IllegalStateException();
+    }
   }
 }

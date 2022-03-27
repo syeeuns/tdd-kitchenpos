@@ -3,23 +3,18 @@ package kitchenpos.application;
 import static kitchenpos.mocker.CoreMock.ORDER_TABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import kitchenpos.domain.OrderRepository;
 import kitchenpos.domain.OrderTable;
 import kitchenpos.domain.OrderTableRepository;
 import kitchenpos.mocker.CoreMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 class OrderTableServiceTest {
 
@@ -61,7 +56,7 @@ class OrderTableServiceTest {
     // 준비
     OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.changeEmpty(false);
-    given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
+    given(orderTableRepository.fetchById(any())).willReturn(clonedOrderTable);
 
     // 실행
     OrderTable newbie = orderTableService.sit(clonedOrderTable.getId());
@@ -76,7 +71,7 @@ class OrderTableServiceTest {
     // 준비
     OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.changeEmpty(true);
-    given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
+    given(orderTableRepository.fetchById(any())).willReturn(clonedOrderTable);
 
     // 실행
     OrderTable newbie = orderTableService.clear(clonedOrderTable.getId());
@@ -105,7 +100,7 @@ class OrderTableServiceTest {
     OrderTable clonedOrderTable = CoreMock.copy(ORDER_TABLE);
     clonedOrderTable.changeNumberOfGuests(CHANGED_NUMBER_OF_GUESTS);
     clonedOrderTable.changeEmpty(false);
-    given(orderTableRepository.findById(any())).willReturn(Optional.of(clonedOrderTable));
+    given(orderTableRepository.fetchById(any())).willReturn(clonedOrderTable);
 
     // 실행
     OrderTable newbie = orderTableService.changeNumberOfGuests(ORDER_TABLE.getId(), clonedOrderTable);
@@ -114,32 +109,32 @@ class OrderTableServiceTest {
     assertThat(newbie.getNumberOfGuests()).isEqualTo(CHANGED_NUMBER_OF_GUESTS);
   }
 
-  static Stream<Arguments> wrongOrderTables() {
+//  static Stream<Arguments> wrongOrderTables() {
 //    OrderTable orderTableWithNegativeNumberOfGuests = CoreMock.copy(ORDER_TABLE);
 //    orderTableWithNegativeNumberOfGuests.changeNumberOfGuests(-1);
-
-    OrderTable emptyOrderTable = CoreMock.copy(ORDER_TABLE);
-    emptyOrderTable.changeEmpty(true);
-
-    return Stream.of(
+//
+//    OrderTable emptyOrderTable = CoreMock.copy(ORDER_TABLE);
+//    emptyOrderTable.changeEmpty(true);
+//
+//    return Stream.of(
 //        arguments(orderTableWithNegativeNumberOfGuests, "음수 손님"),
-        arguments(emptyOrderTable, "비어있는 테이블")
-    );
-  }
-
-  @ParameterizedTest(name = "오더 테이블 인원 변경 -> 실패 With {1}")
-  @MethodSource("wrongOrderTables")
-  void SHOULD_fail_WHEN_change_number_of_guests_of_Order_table(
-    OrderTable wrongOrderTable,
-    String testDescription
-  ) {
-    // 준비
-    given(orderTableRepository.findById(any())).willReturn(Optional.of(ORDER_TABLE));
-
-    // 실행
-    assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(ORDER_TABLE.getId(), wrongOrderTable))
-        .isInstanceOf(Exception.class);
-  }
+//        arguments(emptyOrderTable, "비어있는 테이블")
+//    );
+//  }
+//
+//  @ParameterizedTest(name = "오더 테이블 인원 변경 -> 실패 With {1}")
+//  @MethodSource("wrongOrderTables")
+//  void SHOULD_fail_WHEN_change_number_of_guests_of_Order_table(
+//    OrderTable wrongOrderTable,
+//    String testDescription
+//  ) {
+//    // 준비
+//    given(orderTableRepository.findById(any())).willReturn(Optional.of(ORDER_TABLE));
+//
+//    // 실행
+//    assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(ORDER_TABLE.getId(), wrongOrderTable))
+//        .isInstanceOf(Exception.class);
+//  }
 
   @DisplayName("오더 테이블 전체 조회 -> 성공")
   @Test

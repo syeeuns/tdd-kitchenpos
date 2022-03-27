@@ -85,7 +85,7 @@ public class Order {
   }
 
   public void changeStatus(final OrderStatus status) {
-    setStatus(status);
+    this.status = status;
   }
 
   public LocalDateTime getOrderDateTime() {
@@ -184,11 +184,13 @@ public class Order {
     }
 
     public Order build() {
-      return new Order(this);
+      Order order = new Order(this);
+      order.validate();
+      return order;
     }
   }
 
-  private void setStatus(final OrderStatus status) {
-    this.status = status;
+  private void validate() {
+
   }
 }

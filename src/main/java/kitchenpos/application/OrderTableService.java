@@ -1,7 +1,6 @@
 package kitchenpos.application;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.domain.OrderRepository;
 import kitchenpos.domain.OrderStatus;
@@ -34,32 +33,25 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        orderTable.changeEmpty(false);
+        final OrderTable orderTable = orderTableRepository.fetchById(orderTableId);
+        orderTable.sit();
         return orderTable;
     }
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = orderTableRepository.fetchById(orderTableId);
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.changeNumberOfGuests(0);
-        orderTable.changeEmpty(true);
+        orderTable.clear();
         return orderTable;
     }
 
     @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
         final int numberOfGuests = request.getNumberOfGuests();
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException();
-        }
+        final OrderTable orderTable = orderTableRepository.fetchById(orderTableId);
         orderTable.changeNumberOfGuests(numberOfGuests);
         return orderTable;
     }

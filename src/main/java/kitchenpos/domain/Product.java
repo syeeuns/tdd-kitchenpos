@@ -100,23 +100,23 @@ public class Product {
         validatePrice(price);
     }
 
-    private void validateName(String name) {
+    private static void validateName(String name) {
         if (isValidName(name)) {
             throw new IllegalArgumentException();
         }
     }
 
-    private boolean isValidName(String name) {
+    private static boolean isValidName(String name) {
         return Objects.isNull(name) || name.isEmpty();
     }
 
-    private void validatePrice(BigDecimal price) {
+    private static void validatePrice(BigDecimal price) {
         if (isValidPrice(price)) {
             throw new IllegalArgumentException();
         }
     }
 
-    private boolean isValidPrice(BigDecimal price) {
+    private static boolean isValidPrice(BigDecimal price) {
         return Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0;
     }
 }
